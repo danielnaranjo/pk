@@ -1,0 +1,18 @@
+<ion-view view-title="Cercanos" class="dark">
+  	<ion-content scroll="false" data-tap-disabled="true">
+        <h3 class="padding" ng-hide="lat">Loading..</h3>
+        <ng-map 
+        	center="[{{lat}},{{long}}]"	
+        	class="ngMap"
+        	zoom-control="true" 
+      		zoom-control-options='{style:"small", position:"top_left"}'>
+        	<marker position="{{lat}},{{long}}" title="Let's Pooock!"></marker>
+        	<!-- <custom-marker 
+        		ng-repeat="t in timeline track by $index"
+        		position="[{{t.lat}},{{t.long}}]" 
+        		title="{{t.title}}" 
+        		id="marker-{{$index}}">	
+        	</custom-marker> -->
+        </ng-map>
+    </ion-content>
+</ion-view>

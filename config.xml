@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="com.loultimoenlaweb.pooock" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Pooock</name>
+  <description>
+        Mobile Marketing next level
+  </description>
+  <author email="daniel@loultimoenlaweb.com" href="http://loultimoenlaweb.com/">
+      Daniel Naranjo
+  </author>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <allow-intent href="*.firebaseio.com" />
+  <allow-intent href="auth.firebase.com" />
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="BackupWebStorage" value="none"/>
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+  <plugin name="cordova-background-geolocation-lt" source="npm" />
+</widget>
