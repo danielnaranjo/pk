@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "description": "Pooock: An Ionic project",
   "dependencies": {
-    "@ionic/cloud": "^0.9.0",
+    "@ionic/cloud": "^0.14.0",
     "bluebird": "^3.4.6",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",

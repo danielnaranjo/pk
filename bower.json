@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
-    "angular-moment": "^0.10.3"
+    "angular-moment": "^0.10.3",
+    "firebase": "^3.6.0",
+    "angularfire": "^2.1.0"
   }
 }
