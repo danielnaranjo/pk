@@ -1,11 +1,9 @@
-angular.module('starter.controllers', [])
-
-.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLoading, $cordovaGeolocation, $cordovaBatteryStatus, $cordovaLocalNotification, $ionicPopup, $cordovaNetwork, Exchange, locationService, geoService) {
+app.controller('DashCtrl', function($scope, $ionicDeploy, $rootScope, $ionicPlatform, $ionicLoading, $cordovaGeolocation, $cordovaBatteryStatus, $cordovaLocalNotification, $ionicPopup, $cordovaNetwork, Exchange, locationService, geoService) {
 
   geoService.getPosition()
   .then(function(position) {
     $scope.coords = position.coords;
-    console.log('geoService', position.coords);
+    console.log('geoService', angular.toJson(position.coords));
     $scope.geolocalization = $scope.coords.latitude.toFixed(3)+','+$scope.coords.longitude.toFixed(3);
 
     // GPS to Address by Google Maps API Service
@@ -23,7 +21,7 @@ angular.module('starter.controllers', [])
     // Exchange's services
     Exchange.data.lat=$scope.coords.latitude;
     Exchange.data.long=$scope.coords.longitude;
-    console.info('Exchange at dash', Exchange.data);
+    console.info('Exchange at dash', angular.toJson(Exchange.data));
   }, function(err) {
     console.log('getCurrentPosition error: ' + angular.toJson(err));
   });
@@ -191,17 +189,17 @@ angular.module('starter.controllers', [])
            console.log('isOffline');
         }
       } catch(e) {
-        console.log('catched', e);
+        console.log('catched', angular.toJson(e));
       }
     });
 })
 
-.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, $ionicPopup) {
+app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $ionicLoading, $ionicPopup) {
 
 // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
-  console.info('Exchange at timeline', Exchange.data);
+  console.info('Exchange at timeline', angular.toJson(Exchange.data));
 
   $ionicLoading.show();
   //http://pooock.com/api/v1/notifications
@@ -223,11 +221,11 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config) {
+app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config) {
   // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
-  console.info('Exchange at maps', Exchange.data);
+  console.info('Exchange at maps', angular.toJson(Exchange.data));
   var d = [];
 
   $http({
@@ -236,7 +234,7 @@ angular.module('starter.controllers', [])
     })
   .success(function(data){
     $scope.timeline=data.data;
-    console.log('data @maps', data.pagination.total_elements);
+    console.log('data @maps', data.data);
     $ionicLoading.hide();
   })
   .error(function(){
@@ -256,12 +254,12 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('AccountCtrl', function($scope, $ionicPopup, $timeout, Exchange) {
+app.controller('AccountCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange) {
 
   // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
-  console.info('Exchange at account', Exchange.data);
+  console.info('Exchange at account', angular.toJson(Exchange.data));
 
   $scope.mostrar = function(){
     var alertPopup = $ionicPopup.alert({
@@ -295,7 +293,7 @@ angular.module('starter.controllers', [])
           var coords = location.coords;
           var lat    = coords.latitude;
           var lng    = coords.longitude;
-          console.log('- Location: ', JSON.stringify(location));
+          console.log('- Location: ', angular.toJson(ocation));
 
           // Must signal completion of your callbackFn.
           bgGeo.finish(taskId);
@@ -355,6 +353,60 @@ angular.module('starter.controllers', [])
       }
   });
   //
+})
+
+app.controller('AppCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange, $ionicPush) {
+
+    $scope.checkForPush = function(){
+      // register to received pushes :)
+      $ionicPush.register().then(function(t) {
+          return $ionicPush.saveToken(t);
+      }).then(function(t) {
+          console.log('Token saved:', t.token);
+      });
+
+      // push received :p
+      $scope.$on('cloud:push:notification', function(event, data) {
+          var msg = data.message;
+          alert(msg.title + ': ' + msg.text);
+          console.info('push received:', msg.title, msg.text);
+      });
+    }
+
+// Check Ionic Deploy for new code
+    $scope.checkForUpdates = function() {
+        //console.info('Ionic Deploy: Checking for updates');
+        $scope.version="Buscando actualizaciones";
+        $ionicDeploy.channel = 'production'; //dev
+
+        $ionicDeploy.check().then(function(hasUpdate) {
+            $scope.hasUpdate = hasUpdate;
+            if(hasUpdate==false){
+                $scope.version=$rootScope.version;
+            } else {
+                $scope.doUpdate();
+            }
+            console.info('Ionic Deploy: Update available is ' + hasUpdate);
+        }, function(err) {
+            console.error('Ionic Deploy: Unable to check for updates', err);
+        });
+    }
+
+    // check deploy service
+    $scope.doUpdate = function() {
+        $ionicDeploy.update().then(function(res) {
+            $scope.version='Completada';
+            // force to apply
+            $ionicDeploy.load();
+            console.error('Update Success! ', angular.toJson(res));
+        }, function(err) {
+            $scope.version='Error en descarga';
+            console.error('Update error! ', angular.toJson(error));
+        }, function(prog) {
+            $scope.version='Descargando..';
+            console.error('Progress... ', angular.toJson(prog));
+        });
+    };
 
 
 });
