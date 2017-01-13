@@ -1,4 +1,4 @@
-app.controller('AppCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange, $ionicPush) {
+app.controller('AppCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange, $ionicPush, $ionicPopup) {
 
     $scope.checkForPush = function(){
       // register to received pushes :)
@@ -16,39 +16,44 @@ app.controller('AppCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, 
       });
     }
 
-// Check Ionic Deploy for new code
     $scope.checkForUpdates = function() {
-        //console.info('Ionic Deploy: Checking for updates');
-        $scope.version="";
-        $ionicDeploy.channel = 'production'; //dev
-
-        $ionicDeploy.check().then(function(hasUpdate) {
-            $scope.hasUpdate = hasUpdate;
-            if(hasUpdate==false){
-                $scope.version=$rootScope.version;
-            } else {
-                $scope.doUpdate();
-            }
-            console.info('Ionic Deploy: Update available is ' + hasUpdate);
-        }, function(err) {
-            console.error('Ionic Deploy: Unable to check for updates', err);
-        });
-    }
-
+      console.info('Ionic Deploy: Checking for updates');
+      $ionicDeploy.channel = 'production'; //dev
+      $ionicDeploy.check().then(function(hasUpdate) {
+          $scope.hasUpdate = hasUpdate;
+          if(hasUpdate==false){
+              $scope.version=$rootScope.version;
+          } else {
+              //http://www.theodo.fr/blog/2016/03/its-alive-get-your-ionic-app-to-update-automatically-part-2/
+              $ionicPopup.show({
+                  title: 'Actualización disponible',
+                  subTitle: 'Una actualizacion esta a punto de ser descarga. Desea reiniciar la App luego de descargarla?',
+                  buttons: [
+                  { text: 'Cancelar' },
+                  { text: 'Instalar',
+                      onTap: function(e) { 
+                          $scope.doUpdate();
+                          //deploy.load();
+                      }
+                  }],
+              });
+          }
+          console.debug('Ionic Deploy: Update available is ' + hasUpdate);
+      }, function(err) {
+          console.error('Ionic Deploy: Unable to check for updates', err);
+      });
+    };
+    
     // check deploy service
     $scope.doUpdate = function() {
-        $ionicDeploy.update().then(function(res) {
-            $scope.version='Completada';
-            // force to apply
-            $ionicDeploy.load();
-            console.error('Update Success! ', angular.toJson(res));
-        }, function(err) {
-            $scope.version='Error en descarga';
-            console.error('Update error! ', angular.toJson(error));
-        }, function(prog) {
-            $scope.version='Descargando..';
-            console.error('Progress... ', angular.toJson(prog));
-        });
+      console.debug('Actualizando version..');
+      $ionicDeploy.download().then(function(d) {
+          console.info('Progress... ', angular.toJson(d));
+          return $ionicDeploy.extract();
+      }).then(function(d) {
+          console.error('Update Success! ', angular.toJson(d));
+          return $ionicDeploy.load();
+      });
     };
 
 

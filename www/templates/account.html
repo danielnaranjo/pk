@@ -1,52 +1,12 @@
-<ion-view view-title="Ajustes" class="dark" ng-init="mostrar()">
-  <ion-content class="padding" style="margin-top:100px">
-    <div class="card">
-        <div class="item item-text-wrap">
-            <h3>Una nueva experiencia entre el usuario y sus intereses</h3>
-            <h4>
-                (*) Se pronuncia [päk] y significa "picadura"
-            </h4>
-        </div>
-    </div>
-
-    <ul class="list">
-        <li class="item item-toggle ">
-            Eventos
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Gastronomia
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Novedades
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Shopping
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-    </ul>
+<ion-view view-title="Recibe lo que quieres recibir" class="dark" ng-init="mostrar()">
+  <ion-content class="padding">
+    <ion-list class="dark">
+        <ion-checkbox ng-repeat="item in categorias"
+                      ng-model="item.checked" 
+                      ng-checked="item.checked">
+          {{ item.text }}
+        </ion-checkbox>
+    </ion-list>
     <p>
         Quieres llegar a más personas a través de una experiencia personalizada? 
         <a href="mailto:info@pooock.com" style="color:white">Contáctanos</a>

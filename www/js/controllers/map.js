@@ -1,15 +1,16 @@
-app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config) {
+app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config, configuration) {
   // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
   console.info('Exchange at maps', angular.toJson(Exchange.data));
   var d = [];
 
+  $ionicLoading.show();
   $scope.getMap = function(){
 
     $http({
         method: 'GET',
-        url: 'https://pooock.stamplayapp.com/api/cobject/v1/notifications'
+        url:configuration.protocol+configuration.url+'/notifications',
       })
     .success(function(data){
       $scope.timeline=data.data;

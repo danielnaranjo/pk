@@ -23,9 +23,8 @@ app.factory('locationService', function ($http) {
   };
 })
 
-
 app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation) {
-  var positionOptions = {timeout: 10000, enableHighAccuracy: true}; 
+  var positionOptions = { timeout: 10000, enableHighAccuracy: true }; 
   return {
     getPosition: function() {
       return $ionicPlatform.ready()
@@ -34,17 +33,4 @@ app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation) {
       })
     }
   };
-})
-
-app.factory("Items", function($firebaseArray, $log, $firebaseUtils) {
-  // See https://firebase.google.com/docs/web/setup#project_setup for how to
-  // auto-generate this config
-  var config = {
-    apiKey: "AIzaSyCA2P4MnVACn6_jvbj8aupCmDSlOHfY8JY",
-    authDomain: "pooock.firebaseapp.com", //260441399546
-    databaseURL: "https://pooock-1150.firebaseio.com"
-  };
-  firebase.initializeApp(config);
-  var rootRef = firebase.database().ref();
-  return rootRef;
 })

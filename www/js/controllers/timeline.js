@@ -1,17 +1,35 @@
-app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $ionicLoading, $ionicPopup) {
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, $ionicPopup, configuration,TransitionType, geoService) {
 
-// Exchange's services
+  // geofence
+  $scope.geofences = [];
+  $scope.TransitionType = TransitionType;
+
+  $scope.isTransitionOfType = function (transitionType) {
+    return ($scope.geofence.transitionType & transitionType);
+  };
+
+  $scope.isWhenGettingCloser = function () {
+    return $scope.geofence.transitionType === TransitionType.ENTER;
+  };
+
+  $scope.toggleWhenIgetCloser = function () {
+    $scope.geofence.transitionType ^= TransitionType.ENTER;
+  };
+
+  $scope.toggleWhenIamLeaving = function () {
+    $scope.geofence.transitionType ^= TransitionType.EXIT;
+  };
+
+  // Exchange services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
   console.info('Exchange at timeline', angular.toJson(Exchange.data));
 
-
   $scope.getAll = function(){
     $ionicLoading.show();
-    //http://pooock.com/api/v1/notifications
     $http({
       method: 'GET',
-      url: 'https://pooock.stamplayapp.com/api/cobject/v1/notifications'
+      url:configuration.protocol+configuration.url+'/notifications',
     })
     .success(function(data){
       $scope.timeline=data.data;
@@ -20,16 +38,16 @@ app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $
       // Pass timeline to memory
       Exchange.data.timeline=data.data;
     })
-    .error(function(){
+    .error(function(err){
       console.log('Error API');
       $ionicLoading.hide();
     });
   }
 
   $scope.doRefresh = function() {
-        $scope.getAll();
-        $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply()
-    };
+    $scope.getAll();
+    $scope.$broadcast('scroll.refreshComplete');
+    $scope.$apply()
+  };
 
 })

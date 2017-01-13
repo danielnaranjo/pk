@@ -6,11 +6,12 @@ node_modules/
 platforms/
 plugins/
 api/
-www/lib/
+#www/lib/
 api/
 admin/
-resources/
+#resources/
 
 #files
 *.mwb
 *.*.bak
+test.html

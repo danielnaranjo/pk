@@ -180,3 +180,11 @@ div.content, .dark, h2, h3, div.item {
   min-height: 100% !important; 
   width: 100%;
 }
+
+
+
+/* listas */
+.item-checkbox {
+    background-color: #F7C723 !important;
+    border: none !important;
+}

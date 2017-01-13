@@ -1,12 +1,20 @@
 <ion-view view-title="Cercanos" class="dark" ng-init="getMap()">
   	<ion-content scroll="false" data-tap-disabled="true">
-        <h3 class="padding" ng-hide="timeline">Loading..</h3>
         <ng-map 
-        	center="[{{lat}},{{long}}]"	
+        	center="current-location"	
         	class="ngMap"
         	zoom-control="true" 
       		zoom-control-options='{style:"small", position:"top_left"}'>
-        	<marker position="{{lat}},{{long}}" title="Let's Pooock!"></marker>
+        	<shape name="circle" 
+                no-watcher="true"
+                stroke-color="#FF0000"
+                stroke-opacity="0.6"
+                stroke-weight="1"
+                fill-color="#FF0000"
+                fill-opacity="0.25"
+                center="current-location" 
+                radius="250">
+            </shape>
         	<marker 
         		ng-repeat="t in timeline"
         		position="{{t.lat}},{{t.lon}}" 
