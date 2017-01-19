@@ -1,5 +1,6 @@
-<ion-view view-title="Timeline" class="dark">
+<ion-view view-title="Timeline" class="dark" ng-init="getAll()">
   <ion-content>
+    <ion-refresher pulling-text="Refrescar" on-refresh="doRefresh()"></ion-refresher>
     <ul class="timeline">
       <li ng-repeat="i in timeline">
         <div
@@ -25,7 +26,6 @@
             <span class="pos-absolute-right">
               <i class="ion-ios-clock"></i> 
               <span am-time-ago="i.dt_create"></span>
-              <!-- {{i.dt_create}} -->
             </span>
           </div>
         </div>

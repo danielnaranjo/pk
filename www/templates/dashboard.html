@@ -12,12 +12,10 @@
           <li ng-show="connection">Status: {{connection}}</li>
           <li ng-show="batteryLevel">Bateria: {{batteryLevel}}</li>
           <li ng-show="geolocalization"><span ng-show="geolocalization" ng-hide="address">GPS: {{geolocalization}}</span> <span ng-show="address">{{address}}</span></li>
+          <li ng-controller="AppCtrl" ng-init="checkForUpdates()" ng-show="version">{{version}}</li>
         </ul>
       </p>
-      <!-- <p style="text-align:center;">
-        <button class="button" ng-click="add()">Add notification</button>
-        <button class="button" ng-click="isScheduled()">Is Scheduled</button>
-      </p> -->
+      
     </div>
 
   </ion-content>

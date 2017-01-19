@@ -1,27 +1,16 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', [
-  'ionic', 
-  'starter.controllers', 
-  'starter.services',
-  'starter.filters',
+var app = angular.module('starter', [
+  'ionic',
+  'ionic.cloud',
   'ngCordova',
   //'firebase',
   'angularMoment',
   'ngMap'
-  ])
+]);
 
-.constant("Config", { "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY" })
+app.constant("Config", { "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY" })
 
-.run(function($rootScope, $ionicPlatform) {
+app.run(function($rootScope, $ionicPlatform) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
@@ -31,56 +20,30 @@ angular.module('starter', [
       StatusBar.styleDefault();
     }
   });
-/*
-  $ionicPlatform.ready(function() {
-    if(window.Connection) {
-      if(navigator.connection.type == Connection.NONE) {
-        $ionicPopup.confirm({
-          title: "Internet Disconnected",
-          content: "The internet is disconnected on your device."
-        })
-        .then(function(result) {
-          if(!result) {
-            ionic.Platform.exitApp();
-            console.log('connection', result);
-          }
-        });
-        $scope.connection = "Internet Disconnected";
-      }
-    }
-
-    if ($cordovaNetwork.isOffline()) {
-         $ionicPopup.confirm({
-            title: "Internet is not working",
-            content: "Internet is not working on your device."
-         });
-      }
-  });
-*/
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($ionicCloudProvider) {
+  $ionicCloudProvider.init({
+    "core": {
+      "app_id": "c48ef6d6"
+    }
+  });
+})
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
+app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-  // setup an abstract state for the tabs directive
   .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
   })
 
-  // Each tab has its own nav history stack:
-
   .state('tab.dash', {
     url: '/dash',
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
+        templateUrl: 'templates/dashboard.html',
         controller: 'DashCtrl'
       }
     }
@@ -90,17 +53,17 @@ angular.module('starter', [
     url: '/timeline',
     views: {
       'tab-timeline': {
-        templateUrl: 'templates/tab-timeline.html',
+        templateUrl: 'templates/timeline.html',
         controller: 'TimelineCtrl'
       }
     }
   })
 
   .state('tab.maps', {
-    url: '/mapa',
+    url: '/map',
     views: {
       'tab-maps': {
-        templateUrl: 'templates/mapa.html',
+        templateUrl: 'templates/map.html',
         controller: 'MapaCtrl'
       }
     }
@@ -110,13 +73,12 @@ angular.module('starter', [
     url: '/account',
     views: {
       'tab-account': {
-        templateUrl: 'templates/tab-account.html',
+        templateUrl: 'templates/account.html',
         controller: 'AccountCtrl'
       }
     }
   });
 
-  // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
 });
