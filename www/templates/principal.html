@@ -1,0 +1,48 @@
+<ion-view has-header="false" hide-nav-bar="true" scroll="false" ng-init="main()">
+    <ion-content class="currentSlide">
+
+        <div class="left">
+            <button class="button button-positive button-clear no-animation icon ion-chevron-left"
+             ng-click="" ng-if="!slideIndex" ng-hide="slideIndex==0" ng-init="slideIndex=0;">
+            </button>
+            <button class="button button-positive button-clear no-animation icon ion-chevron-left"
+             ng-click="previous()" ng-if="slideIndex > 0" ng-hide="slideIndex==0">
+            </button>
+        </div>
+
+
+        <div class="right">
+            <button class="button button-positive button-clear no-animation icon ion-chevron-right"
+             ng-click="next()" ng-if="!slideIndex" ng-hide="slideIndex==4">
+            </button>
+            <button class="button button-positive button-clear no-animation icon ion-chevron-right"
+             ng-click="next()" ng-if="slideIndex>0" ng-hide="slideIndex==4">
+            </button>
+        </div>
+
+        <ion-slide-box
+            does-continue="true"
+            show-pager='true'
+            auto-play="false"
+            on-slide-changed="slideChanged(index)">
+
+            <ion-slide ng-repeat="slide in slides" class="currentSlide">
+                <p class="previsual">
+                    <img ng-src="{{slide.image}}" alt="">
+                </p>
+                <h3>
+                    {{slide.name}}
+                </h3>
+                <div class="row">
+                    <div class="col padding">
+                        {{slide.text}}
+                    </div>
+                </div>
+                <a ng-click="gotologin()" class="button btnSlider button-energized" ng-show="slide.button">
+                    Ir a Login / Registro
+                </a>
+            </ion-slide>
+        </ion-slides>
+
+    </ion-content>
+</ion-view>

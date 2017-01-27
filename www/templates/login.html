@@ -1,0 +1,16 @@
+<ion-view has-header="false" hide-nav-bar="true" class="bgFull">
+    <ion-content>
+        <div class="login">
+            <img src="img/imagen02.png" alt="points">
+        </div>
+        <div class="ionic-wrapper">
+          <button class="button button-full icon-left ion-social-facebook-outline button-positive pipolup_azul" ng-click="login('facebook')">
+              Ingresa con Facebook
+          </button>
+          <button class="button button-full icon-left ion-social-twitter-outline" ng-click="login('twitter')">
+              Ingresa con Twitter
+          </button>
+          <p ng-show="onError" style="text-align:center !important">{{onError}}</p>
+        </div>
+    </ion-content>
+</ion-view>
