@@ -2,7 +2,6 @@ var app = angular.module('starter', [
   'ionic',
   'ionic.cloud',
   'ngCordova',
-  //'firebase',
   'angularMoment',
   'ngMap'
 ]);
