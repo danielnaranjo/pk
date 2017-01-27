@@ -1,4 +1,4 @@
-app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $ionicLoading, $ionicPopup, Config) {
+app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $ionicLoading, $ionicPopup, Config, $log) {
 
 // Exchange's services
   $scope.lat = Exchange.data.lat;

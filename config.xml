@@ -78,7 +78,6 @@
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 
-
   <plugin name="ionic-plugin-deploy" spec="~0.6.5"/>
   <plugin name="cordova-plugin-geolocation"/>
   <plugin name="cordova-plugin-network-information"/>
@@ -89,11 +88,8 @@
       <variable name="SENDER_ID" value="1015002537149" />
   </plugin>
   <plugin name="cordova-plugin-geofence" spec="~0.6.0" />
-  <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
-      <variable name="APP_ID" value="352158851814043" />
-      <variable name="APP_NAME" value="PipolUp" />
-  </plugin>
   <plugin name="cordova-plugin-device" spec="~1.1.4" />
   <plugin name="cordova-plugin-battery-status" spec="~1.2.2" />
+  <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0" />
 
 </widget>

@@ -80,8 +80,25 @@ app.config(function($stateProvider, $urlRouterProvider) {
         controller: 'AccountCtrl'
       }
     }
+  })
+
+  .state('logout', {
+      url: '/logout',
+      controller: 'AppCtrl'
+  })
+
+  .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+  })
+
+  .state('slider', {
+      url: '/slider',
+      templateUrl: 'templates/principal.html',
+      controller: 'SetupCtrl'
   });
 
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/slider');
 
 });

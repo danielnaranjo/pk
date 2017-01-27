@@ -1,4 +1,4 @@
-app.controller('AccountCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange, Config) {
+app.controller('AccountCtrl', function($scope, $ionicPopup, $timeout, Exchange, Config, $log) {
 
   // Exchange's services
   $scope.lat = Exchange.data.lat;

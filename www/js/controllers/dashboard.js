@@ -1,4 +1,4 @@
-app.controller('DashCtrl', function($scope, $ionicDeploy, $rootScope, $ionicPlatform, $ionicLoading, $cordovaGeolocation, $cordovaBatteryStatus, $cordovaLocalNotification, $ionicPopup, $cordovaNetwork, Exchange, locationService, geoService, Config) {
+app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLoading, $ionicPopup, Exchange, locationService, geoService, Config, $log) {
 
   geoService.getPosition()
   .then(function(position) {

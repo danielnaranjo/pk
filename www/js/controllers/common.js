@@ -1,4 +1,4 @@
-app.controller('AppCtrl', function($scope, $ionicDeploy, $ionicPopup, $timeout, Exchange, $ionicPush, Config) {
+app.controller('AppCtrl', function($scope, $ionicPopup, $timeout, Exchange, Config, $log) {
 
 
 });

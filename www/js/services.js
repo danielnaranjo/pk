@@ -4,7 +4,7 @@ app.factory('Exchange', function (){
   };
 })
 
-app.factory('locationService', function ($http) {
+app.factory('locationService', function ($http, $log) {
    var locations = [];
    var latlng = "";
    return {
@@ -24,7 +24,7 @@ app.factory('locationService', function ($http) {
 })
 
 
-app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation) {
+app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation, $log) {
   var positionOptions = {timeout: 10000, enableHighAccuracy: true};
   return {
     getPosition: function() {
@@ -36,7 +36,7 @@ app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation) {
   };
 })
 
-app.factory("Items", function($firebaseArray, $log, $firebaseUtils) {
+app.factory("Items", function($firebaseArray, $log, $firebaseUtils, $log) {
   // See https://firebase.google.com/docs/web/setup#project_setup for how to
   // auto-generate this config
   var config = {

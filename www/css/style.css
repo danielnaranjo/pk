@@ -1,6 +1,6 @@
 /* Empty. Add your own CSS if you like */
 
-div.content, .dark, h2, h3, div.item {
+div.content, .dark, h2, h3, div.item, .bgFull {
 	background-color: #F7C723 !important;
 	color: #fff;
 }
@@ -14,7 +14,7 @@ div.content, .dark, h2, h3, div.item {
 
 .rotate h2 {
 	color: #fff;
-	margin-left: 15px; 
+	margin-left: 15px;
 	text-align: center;
 }
 
@@ -25,7 +25,7 @@ div.content, .dark, h2, h3, div.item {
 
 .rotate h5 {
 	text-align: left;
-	margin-left: 15px; 
+	margin-left: 15px;
 }
 
 /* */
@@ -175,8 +175,101 @@ div.content, .dark, h2, h3, div.item {
 }
 
 /* Maps */
-.ngMap { 
-  height: 100% !important; 
-  min-height: 100% !important; 
+.ngMap {
+  height: 100% !important;
+  min-height: 100% !important;
   width: 100%;
+}
+
+.slide, .currentSlide, .ion-slide-box {
+    background-color: #F7C723;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+.slide h3, .slide p {
+    color: #fff;
+    text-align: center !important;
+}
+.previsual  {
+    margin: 0px;
+    width: 100% !important;
+    text-align: center;
+}
+.previsual img {
+    height: 350px !important;
+}
+.currentSlide, .currentSlide h3, .currentSlide p {
+    text-align: center !important;
+    color: #fff;
+}
+
+.swiper-pagination, .slider-pager {
+    display: none !important;/* quitar el paginador*/
+}
+.left, .right{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    height: 49%;
+    z-index: 100;
+    width: 44px;
+    background-color: rgba(0,0,0,0);
+}
+
+.left{
+    left: 0;
+}
+
+.right{
+    right: 0;
+}
+.left button, .right button {
+    color: #fff !important;
+}
+
+
+.im-wrapper .logo {
+    text-align: center;
+}
+.logo img {
+    max-width: 90% !important;
+    width: auto;
+}
+
+.ionic-wrapper {
+    padding: 10px !important;
+}
+
+.appVersion {
+    font-weight:lighter;
+    color:#fff;
+}
+
+.login img {
+	width: 100% !important;
 }

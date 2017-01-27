@@ -1,4 +1,4 @@
-app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config) {
+app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config, $log) {
   // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
