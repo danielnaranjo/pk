@@ -7,7 +7,10 @@ var app = angular.module('starter', [
   'ngMap'
 ]);
 
-app.constant("Config", { "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY" })
+app.constant("Config", {
+    "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY",
+    "Server": "https://pooock.stamplayapp.com/api/cobject/v1", // http://pooock.com/api/v1/notifications
+  })
 
 app.run(function($rootScope, $ionicPlatform) {
   $ionicPlatform.ready(function() {

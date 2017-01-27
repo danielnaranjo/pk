@@ -17,7 +17,7 @@ app.factory('locationService', function ($http) {
         locations = response.data;
         return locations;
       }, function(error){
-        console.log('Error: Cant connect with Google Maps API');
+        $log.error('Error: Cant connect with Google Maps API');
       });
     }
   };
@@ -25,7 +25,7 @@ app.factory('locationService', function ($http) {
 
 
 app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation) {
-  var positionOptions = {timeout: 10000, enableHighAccuracy: true}; 
+  var positionOptions = {timeout: 10000, enableHighAccuracy: true};
   return {
     getPosition: function() {
       return $ionicPlatform.ready()
