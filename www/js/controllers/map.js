@@ -1,36 +1,57 @@
-app.controller('MapaCtrl', function($scope, $ionicLoading, $http, Exchange, Config, $log) {
-  // Exchange's services
-  $scope.lat = Exchange.data.lat;
-  $scope.long = Exchange.data.long;
-  $log.info('Exchange at maps', angular.toJson(Exchange.data));
-  var d = [];
+app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config) {
+  
+  // monitor de conexion a internet
+  ConnectivityMonitor.startWatching();
 
-  $scope.getMap = function(){
+  $ionicLoading.show();
+  $scope.zoom=5;
 
-    $http({
-        method: 'GET',
-        url: Config.Server+'/notifications'
-      })
-    .success(function(data){
-      $scope.timeline=data.data;
-      $log.log('data @maps', data.data);
+  //$scope.lat = -34.603704;
+  //$scope.long = -58.381613;
+  $scope.ubicar = function(){
+    $log.log('ubicar');
+    geoService.getPosition().then(function(position) {
+      $scope.coords = position.coords;
+      $log.info('geoService', $scope.coords.latitude,$scope.coords.longitude);
+      $scope.geolocalization = $scope.coords.latitude.toFixed(3)+','+$scope.coords.longitude.toFixed(3);
+
+      $scope.lat = $scope.coords.latitude;
+      $scope.long = $scope.coords.longitude;
+      //http://ngmap.github.io/#/!custom-marker-ng-repeat.html
+      $scope.map = {
+        center: {
+          latitude: $scope.lat,
+          longitude: $scope.long
+        }
+      };
+      $log.debug('geolocalization', $scope.lat, $scope.long);
+    }, function() {
       $ionicLoading.hide();
-    })
-    .error(function(){
-      $log.error('Error API');
-      $ionicLoading.hide();
+      $log.error('MapaCtrl getCurrentPosition error: ');
     });
+  };
 
-    //http://ngmap.github.io/#/!custom-marker-ng-repeat.html
-    $scope.map = {
-      center: {
-        latitude: $scope.lat,
-        longitude: $scope.long
-      },
-      zoom: 13
-    };
-    //$log.info('googleMapsUrl', Config.googleMapsUrl);
+  $scope.mapa = function(){
 
-  }
+    $scope.ubicar();
+    //$scope.lat = $scope.coords.latitude||'-34.59';
+    //$scope.long = $scope.coords.longitude||'-58.38';
+    $http({
+            method:'GET',
+            url:configuration.protocol+configuration.url+'/tasks',
+            //headers: { 'Access-Control-Allow-Origin': '*' }
+        })
+        .success(function(data) {
+            $scope.tasks = data.tasks;
+            $scope.zoom=16;
+            //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
+            $ionicLoading.hide();
+        })
+        .error(function(){
+          $ionicLoading.hide();
+            $log.error('Error MapaCtrl mapa()');
+        });
+        $cordovaGoogleAnalytics.trackView('Ver Mapa', 100);
+  }; // mapa
 
 })

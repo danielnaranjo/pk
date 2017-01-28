@@ -1,10 +1,9 @@
-app.controller('TimelineCtrl', function($scope, $ionicDeploy, Exchange, $http, $ionicLoading, $ionicPopup, Config, $log) {
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log) {
 
 // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
   $log.info('Exchange at timeline', angular.toJson(Exchange.data));
-
 
   $scope.getAll = function(){
     $ionicLoading.show();

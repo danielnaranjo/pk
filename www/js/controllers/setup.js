@@ -1,5 +1,5 @@
 app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange, $ionicUser, $ionicAuth, $ionicPopup, $state, $ionicSlideBoxDelegate, $ionicLoading, $log) {
-
+/*
 	// Check Ionic Deploy for new code
     $scope.checkForUpdates = function() {
         $log.info('**** Ionic Deploy: Checking for updates');
@@ -51,7 +51,7 @@ app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange,
             return $ionicDeploy.load();
         });
     };
-
+*/
     $scope.entrar = function(){
         $state.go('audit');
     };
@@ -97,12 +97,6 @@ app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange,
 
     $scope.gotologin = function(){
         $state.go('login');
-    };
-
-    // Ver auditorias
-    $scope.seeAudit = function(){
-        $state.go('app.auditoria');
-        $log.info('SetupCtrl > seeAudit() > auditorias');
     };
 
 });
