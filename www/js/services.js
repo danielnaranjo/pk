@@ -274,15 +274,14 @@ app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $
     };
 });
 
-app.factory('updateApp', function($scope, $rootScope,Exchange, $ionicUser, $ionicAuth, $ionicPopup, $ionicLoading, $log){
+app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicLoading, $log){
   return {
     checkForUpdates: function(){
       $log.info('**** Ionic Deploy: Checking for updates');
       $ionicDeploy.channel = 'production'; //dev
       $ionicDeploy.check().then(function(hasUpdate) {
-          $scope.hasUpdate = hasUpdate;
           if(hasUpdate===false){
-              $scope.version=$rootScope.version;
+              //$scope.version=$rootScope.version;
           } else {
               //http://www.theodo.fr/blog/2016/03/its-alive-get-your-ionic-app-to-update-automatically-part-2/
               $ionicPopup.show({
@@ -292,7 +291,7 @@ app.factory('updateApp', function($scope, $rootScope,Exchange, $ionicUser, $ioni
                   { text: 'Cancelar' },
                   { text: 'Instalar',
                       onTap: function(e) {
-                          $scope.doUpdate();
+                        updateApp.doUpdate();
                       }
                   }],
               });
