@@ -32,16 +32,14 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
     $ionicPlatform.ready(function() {
       appVersion.check();
     });
-
+    // Geofences
     $ionicPlatform.ready(function(){
         Geofences.check();
     });
-
     // Get user location
     $ionicPlatform.ready(function(){
         geoService.getPosition();
     });
-
     // $cordovaSQLite
     $ionicPlatform.ready(function(){
         var isAndroid = ionic.Platform.isAndroid();
@@ -58,15 +56,14 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS logs (id integer primary key, action text, date text)");
         $log.info('cordovaSQLite database created');
     });
-
     // check version
     $ionicPlatform.ready(function(){
-      updateApp.checkForUpdates();
+      //updateApp.checkForUpdates();
     })
 
     // si esta autenticado, ir a tareas
     if ($ionicAuth.isAuthenticated()) {
-        $state.go('app.map');
+        $state.go('tab.maps');
         //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
     }
 

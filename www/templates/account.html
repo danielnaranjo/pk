@@ -1,14 +1,5 @@
 <ion-view view-title="Ajustes" class="dark" ng-init="mostrar()">
-  <ion-content class="padding" style="margin-top:100px">
-    <div class="card">
-        <div class="item item-text-wrap">
-            <h3>Una nueva experiencia entre el usuario y sus intereses</h3>
-            <h4>
-                (*) Se pronuncia [päk] y significa "picadura"
-            </h4>
-        </div>
-    </div>
-
+  <ion-content class="padding">
     <ul class="list">
         <li class="item item-toggle ">
             Eventos
@@ -21,6 +12,15 @@
         </li>
         <li class="item item-toggle">
             Gastronomia
+            <label class="toggle">
+                <input type="checkbox" disabled="disabled">
+                <div class="track">
+                    <div class="handle"></div>
+                </div>
+            </label>
+        </li>
+        <li class="item item-toggle">
+            Mascotas
             <label class="toggle">
                 <input type="checkbox" disabled="disabled">
                 <div class="track">
@@ -48,8 +48,11 @@
         </li>
     </ul>
     <p>
-        Quieres llegar a más personas a través de una experiencia personalizada? 
+        Quieres llegar a más personas a través de una experiencia personalizada?
         <a href="mailto:info@pooock.com" style="color:white">Contáctanos</a>
     </p>
+    <button class="button button-full" ng-controller="AppCtrl" ng-click="salir()">
+        Cerrar sesión
+    </button>
   </ion-content>
 </ion-view>

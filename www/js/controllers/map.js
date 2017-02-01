@@ -1,5 +1,5 @@
-app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config) {
-  
+app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config) {
+
   // monitor de conexion a internet
   ConnectivityMonitor.startWatching();
 
@@ -38,7 +38,7 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, exch
     //$scope.long = $scope.coords.longitude||'-58.38';
     $http({
             method:'GET',
-            url:configuration.protocol+configuration.url+'/tasks',
+            url:Config.Server+'/tasks',
             //headers: { 'Access-Control-Allow-Origin': '*' }
         })
         .success(function(data) {
@@ -51,7 +51,6 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, exch
           $ionicLoading.hide();
             $log.error('Error MapaCtrl mapa()');
         });
-        $cordovaGoogleAnalytics.trackView('Ver Mapa', 100);
   }; // mapa
 
 })

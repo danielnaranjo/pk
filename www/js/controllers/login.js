@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal) {
+app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush) {
     $scope.detener = function(){
         // Previene el boton de Volver
         $ionicHistory.nextViewOptions({
@@ -46,7 +46,7 @@ $scope.withFacebook = function(){
       }).then(function(t) {
           //$log.log('Token saved:', t.token);
       });
-        $state.go('app.mapa');
+        $state.go('app.maps');
         $log.info('loginCtrl > withFacebook()');
       }
     }).catch (function(err){
@@ -71,13 +71,13 @@ $scope.withGoogle = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('app.mapa');
+        $state.go('app.maps');
         $log.info('loginCtrl > withGoogle()');
       }
     }).catch (function(err){
       $log.error('loginCtrl > ionicGoogleAuth()', err);
       $ionicLoading.hide();
-      $scope.onError = "No es posible conectar con Google. Error: "+err;
+      $scope.onError = "No es posible conectar con Google";
     });
 }; // withGoogle
 
@@ -96,13 +96,13 @@ $scope.withTwitter = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('app.mapa');
+        $state.go('app.maps');
         $log.info('loginCtrl > withTwitter()');
       }
     }).catch (function(err){
-      $log.error('loginCtrl > ionicGoogleAuth()', err);
+      $log.error('loginCtrl > withTwitter()', err);
       $ionicLoading.hide();
-      $scope.onError = "No es posible conectar con Twitter. Error: "+err;
+      $scope.onError = "No es posible conectar con Twitter";
     });
 }; // withTwitter
 

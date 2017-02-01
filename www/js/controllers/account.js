@@ -3,7 +3,7 @@ app.controller('AccountCtrl', function($scope, $ionicPopup, $timeout, Exchange, 
   // Exchange's services
   $scope.lat = Exchange.data.lat;
   $scope.long = Exchange.data.long;
-  $log.info('Exchange at account', angular.toJson(Exchange.data));
+  //$log.info('Exchange at account', angular.toJson(Exchange.data));
 
   $scope.mostrar = function(){
     var alertPopup = $ionicPopup.alert({
