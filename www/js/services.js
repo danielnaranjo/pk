@@ -286,10 +286,10 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
               //http://www.theodo.fr/blog/2016/03/its-alive-get-your-ionic-app-to-update-automatically-part-2/
               $ionicPopup.show({
                   title: 'Actualización disponible',
-                  //subTitle: 'An update was just downloaded. Would you like to restart your app to use the latest features?',
+                  subTitle: 'Tenemos una nueva version con nuevas caracteriticas y funciones, quieres descargarla y probarla?',
                   buttons: [
-                  { text: 'Cancelar' },
-                  { text: 'Instalar',
+                  { text: 'En otro momento' },
+                  { text: 'Descargar Ahora',
                       onTap: function(e) {
                         updateApp.doUpdate();
                       }
@@ -325,3 +325,19 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
     }
   }
 });
+
+app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log){
+  return {
+    check:function(){
+      //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
+      $rootScope.device = ionic.Platform.device();
+      $rootScope.isWebView = ionic.Platform.isWebView();
+      cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
+          $rootScope.version = version;
+          $log.info('device@info', $rootScope.version, $rootScope.device.platform);
+      }, function(error){
+          $log.error('getVersionNumber failed', angular.toJson(error));
+      });
+    }
+  }
+})

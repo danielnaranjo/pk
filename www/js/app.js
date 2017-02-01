@@ -15,7 +15,7 @@ app.constant("Config", {
   "Server": "https://pooock.stamplayapp.com/api/cobject/v1", // http://pooock.com/api/v1/notifications
 })
 
-app.run(function($ionicPlatform, $rootScope, $cordovaAppVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $cordovaSQLite, $state, $ionicAuth, $ionicHistory, updateApp) {
+app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $cordovaSQLite, $state, $ionicAuth, $ionicHistory, updateApp) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -28,18 +28,9 @@ app.run(function($ionicPlatform, $rootScope, $cordovaAppVersion, $ionicPopup, $w
     }
   });
 
-  //version
+    //version
     $ionicPlatform.ready(function() {
-      //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
-      $rootScope.device = ionic.Platform.device();
-      $rootScope.isWebView = ionic.Platform.isWebView();
-      cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
-          $rootScope.version = version;
-          $log.info('device@info', $rootScope.version, $rootScope.device.platform);
-      }, function(error){
-          $log.error('getVersionNumber failed', angular.toJson(error));
-          //window.fabric.Crashlytics.addLog("Error AppCtrl cordovaAppVersion()");
-      });
+      appVersion.check();
     });
 
     $ionicPlatform.ready(function(){
@@ -98,7 +89,7 @@ app.config(function($ionicCloudProvider) {
         }
     },
     "push": {
-        "sender_id": "1015002537149",
+        "sender_id": "260441399546",
         "pluginConfig": {
             "ios": {
                 "badge": true,

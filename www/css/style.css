@@ -273,3 +273,8 @@ div.content, .dark, h2, h3, div.item, .bgFull {
 .login img {
 	width: 100% !important;
 }
+
+.popup .popup-head h3.popup-title {
+    background-color: transparent !important;
+    color: #000 !important;
+}

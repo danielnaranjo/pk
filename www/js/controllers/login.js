@@ -24,7 +24,7 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, 
           $scope.withGoogle();
         break;
         case provider='twitter':
-          $scope.withGoogle();
+          $scope.withTwitter();
         break;
         default:
           $log.error('Metodo desconocido, por favor, verifique');
@@ -35,7 +35,7 @@ $scope.withFacebook = function(){
     $scope.detener();
     $log.log('LoginCtrl > withFacebook()');
     $ionicLoading.show();
-    if($ionicUser.social===true){
+    if($ionicUser.social.facebook===true){
       $log.debug('fb > object', $ionicUser.social);
     }
     $ionicAuth.login('facebook').then(function(){
@@ -59,11 +59,11 @@ $scope.withFacebook = function(){
 $scope.withGoogle = function(){
     $log.log('LoginCtrl > withGoogle()');
     $ionicLoading.show();
-    if($ionicUser.social===true){
+    if($ionicUser.social.google===true){
       $log.debug('g+ > object', $ionicUser.social);
     }
     $ionicAuth.login('google').then(function(){
-      $log.debug('$ionicGoogleAuth', $ionicAuth);
+      //$log.debug('$ionicGoogleAuth', $ionicAuth);
       if ($ionicAuth.isAuthenticated()) {
         $ionicLoading.hide();
         $ionicPush.register().then(function(t) {
@@ -84,11 +84,11 @@ $scope.withGoogle = function(){
 $scope.withTwitter = function(){
     $log.log('LoginCtrl > withTwitter()');
     $ionicLoading.show();
-    if($ionicUser.social===true){
+    if($ionicUser.social.twitter===true){
       $log.debug('twitter > object', $ionicUser.social);
     }
     $ionicAuth.login('twitter').then(function(){
-      $log.debug('$ionicGoogleAuth', $ionicAuth, $ionicGoogleAuth);
+      //$log.debug('$ionicGoogleAuth', $ionicAuth, $ionicGoogleAuth);
       if ($ionicAuth.isAuthenticated()) {
         $ionicLoading.hide();
         $ionicPush.register().then(function(t) {
@@ -105,20 +105,5 @@ $scope.withTwitter = function(){
       $scope.onError = "No es posible conectar con Twitter. Error: "+err;
     });
 }; // withTwitter
-
-  $scope.open = function(){
-    $scope.modal.show();
-  };//open
-
-  $ionicModal.fromTemplateUrl('templates/signin.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-  }).then(function(modal) {
-      $scope.modal = modal;
-  });
-
-  $scope.closeModal = function(){
-      $scope.modal.hide();
-  }; // closeModal
 
 });
