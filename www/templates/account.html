@@ -1,52 +1,26 @@
-<ion-view view-title="Ajustes" class="dark" ng-init="mostrar()">
+<ion-view view-title="Ajustes" class="dark">
   <ion-content class="padding">
-    <ul class="list">
-        <li class="item item-toggle ">
-            Eventos
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Gastronomia
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Mascotas
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Novedades
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-        <li class="item item-toggle">
-            Shopping
-            <label class="toggle">
-                <input type="checkbox" disabled="disabled">
-                <div class="track">
-                    <div class="handle"></div>
-                </div>
-            </label>
-        </li>
-    </ul>
+        <div class="row">
+            <div class="col col-75">
+                <h3>Hola {{usuario}}</h3>
+            </div>
+            <div class="col padding">
+                <img ng-src="{{fotoPerfil}}" class="fotoPerfil">
+            </div>
+        </div>
+        
+        <p>Categorias disponibles:</p>
+        <tags-input class="bootstrap"
+            ng-model="categorias"
+            placeholder="Agrega o elimina categorias"
+            replace-spaces-with-dashes="false">
+        <auto-complete 
+            source="loadMovies($query)"
+            min-length="0"
+            debounce-delay="0"
+            max-results="10">     
+        </auto-complete>
+    </tags-input>
     <p>
         Quieres llegar a más personas a través de una experiencia personalizada?
         <a href="mailto:info@pooock.com" style="color:white">Contáctanos</a>

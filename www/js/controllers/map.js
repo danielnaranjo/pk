@@ -25,9 +25,9 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
         }
       };
       $log.debug('geolocalization', $scope.lat, $scope.long);
-    }, function() {
+    }, function(err) {
       $ionicLoading.hide();
-      $log.error('MapaCtrl getCurrentPosition error: ');
+      $log.error('MapaCtrl getCurrentPosition error: ', err.message);
     });
   };
 
@@ -37,20 +37,20 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
     //$scope.lat = $scope.coords.latitude||'-34.59';
     //$scope.long = $scope.coords.longitude||'-58.38';
     $http({
-            method:'GET',
-            url:Config.Server+'/tasks',
-            //headers: { 'Access-Control-Allow-Origin': '*' }
-        })
-        .success(function(data) {
-            $scope.tasks = data.tasks;
-            $scope.zoom=16;
-            //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
-            $ionicLoading.hide();
-        })
-        .error(function(){
-          $ionicLoading.hide();
-            $log.error('Error MapaCtrl mapa()');
-        });
+      method:'GET',
+        url:Config.Server+'/notifications',
+        //headers: { 'Access-Control-Allow-Origin': '*' }
+    })
+    .success(function(data) {
+        $scope.timeline=data.data;
+        $scope.zoom=16;
+        //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
+        $ionicLoading.hide();
+    })
+    .error(function(){
+      $ionicLoading.hide();
+      $log.error('Error MapaCtrl mapa()');
+    });
   }; // mapa
 
 })

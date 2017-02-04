@@ -10,7 +10,7 @@ app.factory('locationService', function ($http, $log) {
    return {
      getLocation: function(latlng){
      return $http({
-        url: "http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true",
+        url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true",
         method: "GET",
         })
      .then(function(response){
@@ -288,7 +288,7 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
                   title: 'Actualización disponible',
                   subTitle: 'Tenemos una nueva version con nuevas caracteriticas y funciones, quieres descargarla y probarla?',
                   buttons: [
-                  { text: 'En otro momento' },
+                  { text: 'Cancelar' },
                   { text: 'Descargar Ahora',
                       onTap: function(e) {
                         updateApp.doUpdate();
@@ -330,9 +330,9 @@ app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log){
   return {
     check:function(){
       //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
-      $rootScope.device = ionic.Platform.device();
-      $rootScope.isWebView = ionic.Platform.isWebView();
-      cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
+        $rootScope.device = ionic.Platform.device();
+        $rootScope.isWebView = ionic.Platform.isWebView();
+        cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
           $rootScope.version = version;
           $log.info('device@info', $rootScope.version, $rootScope.device.platform);
       }, function(error){

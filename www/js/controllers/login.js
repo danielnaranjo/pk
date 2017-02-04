@@ -9,7 +9,7 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, 
 	if ($ionicAuth.isAuthenticated()) {
 		var points = 0;//$localstorage.getObject('points');
 		if(points.length>0){
-			$state.go('app.map');
+			$state.go('tab.maps');
 		} else {
 			$state.go('app.dash');
 		}
@@ -46,7 +46,7 @@ $scope.withFacebook = function(){
       }).then(function(t) {
           //$log.log('Token saved:', t.token);
       });
-        $state.go('app.maps');
+        $state.go('tab.maps');
         $log.info('loginCtrl > withFacebook()');
       }
     }).catch (function(err){
@@ -71,7 +71,7 @@ $scope.withGoogle = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('app.maps');
+        $state.go('tab.maps');
         $log.info('loginCtrl > withGoogle()');
       }
     }).catch (function(err){
@@ -96,7 +96,7 @@ $scope.withTwitter = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('app.maps');
+        $state.go('tab.maps');
         $log.info('loginCtrl > withTwitter()');
       }
     }).catch (function(err){

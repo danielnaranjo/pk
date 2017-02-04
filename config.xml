@@ -10,6 +10,8 @@
   <content src="index.html"/>
   <access origin="*"/>
   <allow-navigation href="*"/>
+  <allow-navigation href="http://192.168.1.22:8100"/>
+  <allow-navigation href="http://192.168.0.103:8100"/>
   <allow-intent href="*"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>

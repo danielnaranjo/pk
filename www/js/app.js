@@ -8,6 +8,7 @@ var app = angular.module('starter', [
   'ngMap',
   //'firebase',
   'greatCircles',
+  'ngTagsInput',
 ]);
 
 app.constant("Config", {
@@ -30,7 +31,7 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
 
     //version
     $ionicPlatform.ready(function() {
-      appVersion.check();
+        appVersion.check();
     });
     // Geofences
     $ionicPlatform.ready(function(){

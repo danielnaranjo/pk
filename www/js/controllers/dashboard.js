@@ -23,7 +23,7 @@ app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLo
     Exchange.data.long=$scope.coords.longitude;
     $log.info('Exchange at dash', angular.toJson(Exchange.data));
   }, function(err) {
-    $log.error('getCurrentPosition error: ' + angular.toJson(err));
+    $log.error('getCurrentPosition error: ',err.message);
   });
 
 })
