@@ -49,7 +49,7 @@ app.factory("Items", function($firebaseArray, $log, $firebaseUtils, $log) {
   return rootRef;
 });
 
-app.factory('$localstorage', function($window, $cordovaSQLite, $log) {
+app.factory('$localstorage', function($window, $log) {
     return {
         set: function(key, value) {
             $window.localStorage[key] = value;
@@ -65,29 +65,6 @@ app.factory('$localstorage', function($window, $cordovaSQLite, $log) {
         },
         clear: function(key){
             $window.localStorage.removeItem(key);
-        },
-        insertar: function(action){
-            $cordovaSQLite.execute(db, "INSERT INTO logs (action, date) VALUES (?,?)", [action, new Date()]).then(function(res) {
-                $log.log("INSERT ID -> " + res.insertId);
-                //return res.insertId;
-            }, function (err) {
-                $log.error('$localstorage > insertar', err);
-            });
-        },
-        seleccionar: function(){
-            $cordovaSQLite.execute(db, "SELECT * FROM logs").then(function(res) {
-                if(res.rows.length > 0) {
-                    for(var i = 0; i < res.rows.length; i++){
-                        $log.info(i+ ".- " + res.rows.item(i).action + " " + res.rows.item(i).date);
-                    }
-                    $log.debug("results -> " + res.rows.length);
-                    return res;
-                } else {
-                    $log.info("No results found");
-                }
-            }, function (err) {
-                $log.error('$localstorage > seleccionar', err);
-            });
         }
     };
 });
@@ -141,7 +118,7 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
                                     duration: 2000
                                 });
                                 if ($ionicAuth.isAuthenticated()) {
-                                    $state.go('app.tomar', { branch_id: geo.notification.data.branch_id, task_id: geo.notification.data.task_id });
+                                    //$state.go('app.tomar', { branch_id: geo.notification.data.branch_id, task_id: geo.notification.data.task_id });
                                     $log.debug('geofences > $rootScope > $apply', angular.toJson(geo));
                                 } else {
                                     $log.error('geofences required your logged');
@@ -200,7 +177,7 @@ app.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, $ionicP
                 });
                 $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
                     var alertPopup = $ionicPopup.alert({
-                        title: 'PipolUp!',
+                        title: 'Pooock!',
                         template: 'Comprueba tu conexión a Internet'
                     });
                     alertPopup.then(function(res) {
@@ -228,18 +205,16 @@ app.factory('BatteryMonitor', function($rootScope, $cordovaBatteryStatus, $ionic
                     var batteryLevel = args.level;
                     if(batteryLevel < 20){
                         var confirmPopup = $ionicPopup.show({
-                            title: 'PipolUp!',
+                            title: 'Pooock!',
                             template: 'Tienes '+ batteryLevel +'% de bateria',
                             buttons: [{
                                 text: 'Ok',
                                 type: 'button-balanced pipol_verde',
                                 onTap: function(e) {
-                                    $log.info('Poca bateria! ' + batteryLevel +'%');
+                                  //$log.info('Poca bateria! ' + batteryLevel +'%');
                                 }//onTap
                             }]
                         });
-                        // pendiente las notificaciones
-                        $localstorage.insertar('AppCtrl batteryLevel()', angular.toJson(args));
                     }
                     //$log.debug('cordovaBatteryStatus', angular.toJson(args));
                 });

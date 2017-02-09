@@ -54,5 +54,5 @@ var GreatCircle = {
 
 };
 //http://plnkr.co/edit/zsh2Bt7jBl1Z2mKKqlwa
-angular.module('greatCircles',[])
-  .value('GreatCircle',GreatCircle);
+//angular.module('greatCircles',[])
+app.value('GreatCircle',GreatCircle);

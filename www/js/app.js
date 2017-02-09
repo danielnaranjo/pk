@@ -16,7 +16,7 @@ app.constant("Config", {
   "Server": "https://pooock.stamplayapp.com/api/cobject/v1", // http://pooock.com/api/v1/notifications
 })
 
-app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $cordovaSQLite, $state, $ionicAuth, $ionicHistory, updateApp) {
+app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -41,26 +41,6 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
     $ionicPlatform.ready(function(){
         geoService.getPosition();
     });
-    // $cordovaSQLite
-    $ionicPlatform.ready(function(){
-        var isAndroid = ionic.Platform.isAndroid();
-        //http://phonegapcmsworld.blogspot.com.ar/2016/06/iosDatabaseLocation-value-is-now-mandatory-in-openDatabase-call.html
-        if(isAndroid){
-            // Works on android but not in iOS
-            db = $cordovaSQLite.openDB({ name: "pooock.db", iosDatabaseLocation:'default'});
-            $log.info('cordovaSQLite is on Android');
-        } else{
-            // Works on iOS
-            db = window.sqlitePlugin.openDatabase({ name: "pooock.db", location: 2, createFromLocation: 1});
-            $log.info('cordovaSQLite is on iOS');
-        }
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS logs (id integer primary key, action text, date text)");
-        $log.info('cordovaSQLite database created');
-    });
-    // check version
-    $ionicPlatform.ready(function(){
-      //updateApp.checkForUpdates();
-    })
 
     // si esta autenticado, ir a tareas
     if ($ionicAuth.isAuthenticated()) {

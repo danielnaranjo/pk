@@ -16,7 +16,7 @@ app.controller('AppCtrl', function($scope, $ionicPopup, $timeout, Exchange, Conf
         $log.log('$ionicPush > notification', data);
         var msg = data.message;
         alert(msg.title + ': ' + msg.text);
-        $localstorage.insertar('$ionicPush > notification',data);
+        $log.info('$ionicPush > notification',data);
     });//ionicPush
 
 });
