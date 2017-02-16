@@ -36,11 +36,7 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
       $scope.ubicar();
       //$scope.lat = $scope.coords.latitude||'-34.59';
       //$scope.long = $scope.coords.longitude||'-58.38';
-      $http({
-        method:'GET',
-          url:Config.Server+'/notifications',
-          //headers: { 'Access-Control-Allow-Origin': '*' }
-      })
+      remoteServer.getData('points')
       .success(function(data) {
           $scope.timeline=data.data;
           $scope.zoom=16;

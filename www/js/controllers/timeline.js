@@ -1,4 +1,4 @@
-app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log) {
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer) {
 
 // Exchange's services
   $scope.lat = Exchange.data.lat;
@@ -7,19 +7,16 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
 
   $scope.getAll = function(){
     $ionicLoading.show();
-    $http({
-      method: 'GET',
-      url: Config.Server+'/points'
-    })
-    .success(function(data){
-      $scope.timeline=data.data;
+
+    remoteServer.getData('points')
+    .success(function(data) {
+      $scope.timeline=data.result;
       $ionicLoading.hide();
-      $log.log('data @timeline', data.pagination.total_elements);
-      // Pass timeline to memory
+      $log.log('data @timeline', data.result.length);
       Exchange.data.timeline=data.data;
     })
-    .error(function(){
-      $log.error('Error API');
+    .error(function(err){
+      $log.error(err);
       $ionicLoading.hide();
     });
   }
