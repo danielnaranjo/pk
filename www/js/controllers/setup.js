@@ -7,6 +7,8 @@ app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange,
         {name:"Comenzar", text:"Usa tu facebook o Twitter para continuar", image:"img/PantallasSlider-01.png", button: true },
     ];
 
+    $scope.final=$scope.slides.length-1;
+
     $scope.next = function() {
         $ionicSlideBoxDelegate.next();
         //$log.debug('ionicSlideBoxDelegate next', $ionicSlideBoxDelegate);

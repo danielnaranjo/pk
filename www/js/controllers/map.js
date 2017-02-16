@@ -32,24 +32,25 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
   };
 
   $scope.mapa = function(){
-
-    $scope.ubicar();
-    //$scope.lat = $scope.coords.latitude||'-34.59';
-    //$scope.long = $scope.coords.longitude||'-58.38';
-    $http({
-      method:'GET',
-        url:Config.Server+'/notifications',
-        //headers: { 'Access-Control-Allow-Origin': '*' }
-    })
-    .success(function(data) {
-        $scope.timeline=data.data;
-        $scope.zoom=16;
-        //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
+    $scope.$on('$ionicView.enter', function(){
+      $scope.ubicar();
+      //$scope.lat = $scope.coords.latitude||'-34.59';
+      //$scope.long = $scope.coords.longitude||'-58.38';
+      $http({
+        method:'GET',
+          url:Config.Server+'/notifications',
+          //headers: { 'Access-Control-Allow-Origin': '*' }
+      })
+      .success(function(data) {
+          $scope.timeline=data.data;
+          $scope.zoom=16;
+          //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
+          $ionicLoading.hide();
+      })
+      .error(function(){
         $ionicLoading.hide();
-    })
-    .error(function(){
-      $ionicLoading.hide();
-      $log.error('Error MapaCtrl mapa()');
+        $log.error('Error MapaCtrl mapa()');
+      });
     });
   }; // mapa
 

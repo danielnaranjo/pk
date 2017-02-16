@@ -9,7 +9,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
     $ionicLoading.show();
     $http({
       method: 'GET',
-      url: Config.Server+'/notifications'
+      url: Config.Server+'/points'
     })
     .success(function(data){
       $scope.timeline=data.data;

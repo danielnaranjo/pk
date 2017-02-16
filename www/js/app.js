@@ -13,7 +13,7 @@ var app = angular.module('starter', [
 
 app.constant("Config", {
   "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY",
-  "Server": "https://pooock.stamplayapp.com/api/cobject/v1", // http://pooock.com/api/v1/notifications
+  "Server": "http://pooock.com/api/v1", // https://pooock.stamplayapp.com/api/cobject/v1
 })
 
 app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {

@@ -1,11 +1,11 @@
-<ion-view view-title="Ajustes" class="dark">
+<ion-view view-title="Ajustes" class="dark" has-header="false" hide-nav-bar="true" >
   <ion-content class="padding">
         <div class="row">
-            <div class="col col-75">
-                <h3>Hola {{usuario}}</h3>
+            <div class="col">
+                <h4>Hola {{usuario}}</h4>
             </div>
             <div class="col padding">
-                <img ng-src="{{fotoPerfil}}" class="fotoPerfil">
+                <img ng-src="{{fotoPerfil}}" class="fotoPerfil" >
             </div>
         </div>
         
@@ -28,5 +28,6 @@
     <button class="button button-full" ng-controller="AppCtrl" ng-click="salir()">
         Cerrar sesión
     </button>
+    
   </ion-content>
 </ion-view>

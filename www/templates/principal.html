@@ -13,10 +13,10 @@
 
         <div class="right">
             <button class="button button-positive button-clear no-animation icon ion-chevron-right"
-             ng-click="next()" ng-if="!slideIndex" ng-hide="slideIndex==4">
+             ng-click="next()" ng-if="!slideIndex" ng-hide="slideIndex==final">
             </button>
             <button class="button button-positive button-clear no-animation icon ion-chevron-right"
-             ng-click="next()" ng-if="slideIndex>0" ng-hide="slideIndex==4">
+             ng-click="next()" ng-if="slideIndex>0" ng-hide="slideIndex==final">
             </button>
         </div>
 
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <a ng-click="gotologin()" class="button btnSlider button-energized" ng-show="slide.button">
-                    Ir a Login / Registro
+                    Entrar
                 </a>
             </ion-slide>
         </ion-slides>

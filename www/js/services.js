@@ -301,7 +301,7 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
   }
 });
 
-app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log){
+app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $localstorage){
   return {
     check:function(){
       //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
@@ -313,6 +313,76 @@ app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log){
       }, function(error){
           $log.error('getVersionNumber failed', angular.toJson(error));
       });
+      var userDevice = {
+        os: $rootScope.device.platform,
+        version: $rootScope.device.version,
+        webView: $rootScope.isWebView,
+        app_version: $rootScope.version,
+        cordova_version: $rootScope.device.cordova
+      }
+      $localstorage.setObject('userDevice', userDevice );
+      $log.debug('userDevice', angular.toJson(userDevice));
+    },
+    getPlatform: function() {
+      return $localstorage.getObject('userDevice');
     }
   }
-})
+});
+
+app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform){
+  return {
+    sync: function(){
+      $log.debug('sync');
+    },
+    openBrowser : function(Url){
+      var options = {
+              location: 'yes',
+              clearcache: 'yes',
+              toolbar: 'no'
+          };
+      $ionicPlatform.ready(function(){
+          $cordovaInAppBrowser.open(Url+'/?utm_source=inappbrowser', '_system', options)
+          .then(function(event) {
+              //$log.debug('cordovaInAppBrowser',event);
+          })
+          .catch(function(event) {
+              $log.error('cordovaInAppBrowser',event);
+          });
+      });
+    },
+    firstUsage : function(Boolean){
+        var userDevice = {
+            firstUsage: true,
+            slider:true,
+        }
+        $localstorage.setObject('userDevice', userDevice );
+        $localstorage.setObject('userDevice', userDevice );
+    }
+  }
+});
+
+app.factory('remoteServer', function($http, Config, $log){
+    return {
+        getData: function(url){
+            $log.info('remoteServer > getData', url);
+            var conf = {
+                headers: {
+                    //'Host':'http://pipolup.com',
+                    //'Origin':'*'
+                }
+            }
+            return $http.get(Config.Server+'/'+url, conf);
+        },
+        postData: function(url, values){
+            $log.info('remoteServer > postData', url);
+            $log.debug('remoteServer > postData', values);
+            var conf = {
+                headers: {
+                    //'Host':'http://pipolup.com',
+                    //'Origin':'*'
+                }
+            }
+            return $http.post(Config.Server+'/'+url, values, conf);
+        }
+    }
+});

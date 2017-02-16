@@ -1,4 +1,4 @@
-<ion-view view-title="Let's Pooock!" class="dark">
+<ion-view view-title="Let's Pooock!" class="dark" has-header="false" hide-nav-bar="true" >
   <ion-content class="padding">
 
     <div class="rotate">
@@ -9,10 +9,8 @@
       
       <p style="text-align:center;">
         <ul style="text-align:center;">
-          <li ng-show="connection">Status: {{connection}}</li>
-          <li ng-show="batteryLevel">Bateria: {{batteryLevel}}</li>
           <li ng-show="geolocalization"><span ng-show="geolocalization" ng-hide="address">GPS: {{geolocalization}}</span> <span ng-show="address">{{address}}</span></li>
-          <li ng-controller="AppCtrl" ng-init="checkForUpdates()" ng-show="version">{{version}}</li>
+          <li ng-controller="AppCtrl" ng-click="checkupdate()" ng-show="version">{{version}}</li>
         </ul>
       </p>
       
