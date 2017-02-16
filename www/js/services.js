@@ -100,53 +100,53 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
             //console.log('app > geofences > points', points, angular.toJson(points));
             // run when is already done!
             if(points.length>0){
-                $log.log('app > geofences > points loaded', points.length);
-                $window.geofence.addOrUpdate(points);
-                $window.geofence.onTransitionReceived = function (geofences) {
-                    //$log.log(geofences);
-                    if (geofences) {
-                        $rootScope.$apply(function () {
-                            geofences.forEach(function (geo) {
-                                geo.notification = geo.notification || {
-                                    title: "Geofence transition",
-                                    text: "Without notification",
-                                    vibration: [0]// desactivado
-                                };
-                                $ionicLoading.show({
-                                    template: geo.notification.title + ": " + geo.notification.text,
-                                    noBackdrop: true,
-                                    duration: 2000
-                                });
-                                if ($ionicAuth.isAuthenticated()) {
-                                    //$state.go('app.tomar', { branch_id: geo.notification.data.branch_id, task_id: geo.notification.data.task_id });
-                                    $log.debug('geofences > $rootScope > $apply', angular.toJson(geo));
-                                } else {
-                                    $log.error('geofences required your logged');
-                                    $state.go('login');
-                                }
-                            });
-                        });
+              $log.log('app > geofences > points loaded', points.length);
+              $window.geofence.addOrUpdate(points);
+              $window.geofence.onTransitionReceived = function (geofences) {
+                  //$log.log(geofences);
+                  if (geofences) {
+                      $rootScope.$apply(function () {
+                          geofences.forEach(function (geo) {
+                              geo.notification = geo.notification || {
+                                title: "Geofence transition",
+                                text: "Without notification",
+                                vibration: [0]// desactivado
+                              };
+                              $ionicLoading.show({
+                                template: geo.notification.title + ": " + geo.notification.text,
+                                noBackdrop: true,
+                                duration: 2000
+                              });
+                              if ($ionicAuth.isAuthenticated()) {
+                                //$state.go('app.tomar', { branch_id: geo.notification.data.branch_id, task_id: geo.notification.data.task_id });
+                                $log.debug('geofences > $rootScope > $apply', angular.toJson(geo));
+                              } else {
+                                $log.error('geofences required your logged');
+                                $state.go('login');
+                              }
+                          });
+                      });
+                  }
+                  $window.geofence.onNotificationClicked = function (notificationData) {
+                    //$log.log('notificationData',notificationData);
+                    $log.info('notificationData',notificationData);
+                    if (notificationData) {
+                      $log.warn('onNotificationClicked', notificationData);
                     }
-                    $window.geofence.onNotificationClicked = function (notificationData) {
-                        //$log.log('notificationData',notificationData);
-                        $log.info('notificationData',notificationData);
-                        if (notificationData) {
-                            $log.warn('onNotificationClicked', notificationData);
-                        }
-                    };
-                };
+                  };
+              };
 
-                $window.geofence.initialize(function () {
-                    $log.info("geofence > Successful initialization");
-                });
+              $window.geofence.initialize(function () {
+                $log.info("geofence > Successful initialization");
+              });
             }
         },
         remove: function(){
-            $window.geofence.removeAll().then(function () {
-                $log.debug('All geofences successfully removed.');
-            }, function (reason) {
-                $log.error('Removing geofences failed', reason);
-            });
+          $window.geofence.removeAll().then(function () {
+            $log.debug('All geofences successfully removed.');
+          }, function (reason) {
+            $log.error('Removing geofences failed', reason);
+          });
         }
     };
 });
@@ -173,24 +173,17 @@ app.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, $ionicP
         startWatching: function(){
             if(ionic.Platform.isWebView()){
                 $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-                    //$log.log("went online");
+                  //$log.log("went online");
                 });
                 $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Pooock!',
-                        template: 'Comprueba tu conexión a Internet'
-                    });
-                    alertPopup.then(function(res) {
-                        $log.log('Comprueba tu conexión a Internet', res);
-                    });
-                    $log.log("went offline");
+                  //$log.log("went offline");
                 });
             } else {
                 window.addEventListener("online", function(e) {
-                    //$log.log("went online");
+                  //$log.log("went online");
                 }, false);
                 window.addEventListener("offline", function(e) {
-                    $log.log("went offline");
+                  //$log.log("went offline");
                 }, false);
             }
         }
@@ -329,10 +322,21 @@ app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $locals
   }
 });
 
-app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform){
+app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform, ConnectivityMonitor, remoteServer){
   return {
     sync: function(){
-      $log.debug('sync');
+      if(ConnectivityMonitor.isOnline()){
+        $localstorage.remove('points');
+        remoteServer.getData('points')
+          .success(function(data) {
+            $scope.timeline=data.result;
+          })
+          .error(function(err){
+            $log.error(err);
+          });
+        $localstorage.setObject('points', points );
+        $log.debug('sync');
+      }
     },
     openBrowser : function(Url){
       var options = {

@@ -1,4 +1,4 @@
-app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config) {
+app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config, remoteServer) {
 
   // monitor de conexion a internet
   ConnectivityMonitor.startWatching();
@@ -34,13 +34,10 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
   $scope.mapa = function(){
     $scope.$on('$ionicView.enter', function(){
       $scope.ubicar();
-      //$scope.lat = $scope.coords.latitude||'-34.59';
-      //$scope.long = $scope.coords.longitude||'-58.38';
       remoteServer.getData('points')
       .success(function(data) {
           $scope.timeline=data.data;
           $scope.zoom=16;
-          //$log.info('MapaCtrl mapa()', angular.toJson($scope.tasks) );
           $ionicLoading.hide();
       })
       .error(function(){

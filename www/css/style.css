@@ -333,7 +333,7 @@ div.content, .dark, h2, h3, div.item, .bgFull {
   background-color: #ffff00;
 }
 .fotoPerfil {
-    background: red;
+    background: gray;
     padding: 0;
      -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
