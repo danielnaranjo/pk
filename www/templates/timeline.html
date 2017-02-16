@@ -6,7 +6,7 @@
         <div
           ng-hide="i.img"
           class="timeline-thumb bg-color-yellow timeline-icon">
-          <i class="{{i.icon}}"></i>
+          <i class="{{i.campaign.category.icon}}"></i>
         </div>
         <img
           ng-show="item.img"
@@ -14,18 +14,18 @@
           alt="{{i.title}}"
           class="timeline-thumb" />
         <div class="timeline-item">
-          <h4>{{i.title}}</h4>
-          <p>{{i.text}}</p>
+          <h4>{{i.campaign.name}}</h4>
+          <p>{{i.notification.message}}</p>
           <div class="timeline-stats">
-            <i class="ion-heart"></i> 
-            {{i.actions.ratings.total}}
+            <i class="{{i.campaign.category.icon}}"></i> 
+            {{i.actions.ratings.total||'0'}}
             <i class="ion-thumbsup"></i> 
-            {{i.actions.votes.total}}
+            {{i.actions.votes.upvotes||'0'}}
             <i class="ion-map"></i> 
-            <span ng-show="lat">{{i.lat|distance:i.lon:lat:long }}</span>
+            <span ng-show="latitude">{{i.latitude}} {{i.longitude}}</span>
             <span class="pos-absolute-right">
               <i class="ion-ios-clock"></i> 
-              <span am-time-ago="i.dt_create"></span>
+              <span am-time-ago="i.campaign.validFrom"></span>
             </span>
           </div>
         </div>

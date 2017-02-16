@@ -8,8 +8,8 @@
         	<marker position="current-location" title="Let's Pooock!"></marker>
         	<marker
         		ng-repeat="t in timeline"
-        		position="{{t.lat}},{{t.lon}}"
-        		title="{{t.title}}">
+        		position="{{t.latitude}},{{t.longitude}}"
+        		title="{{t.campaign.name}}">
         	</marker>
             <shape name="circle"
                 no-watcher="true"
