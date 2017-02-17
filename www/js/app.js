@@ -13,7 +13,7 @@ var app = angular.module('starter', [
 
 app.constant("Config", {
   "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY",
-  "Server": "http://pooock.com/api/v1", // https://pooock.stamplayapp.com/api/cobject/v1
+  "Server": "http://pooock.com/api/data", // https://pooock.stamplayapp.com/api/cobject/v1
 })
 
 app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {
@@ -35,7 +35,7 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
     });
     // Geofences
     $ionicPlatform.ready(function(){
-        Geofences.check();
+        Geofences.new();
     });
     // Get user location
     $ionicPlatform.ready(function(){
@@ -44,7 +44,7 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
 
     // si esta autenticado, ir a tareas
     if ($ionicAuth.isAuthenticated()) {
-        $state.go('tab.maps');
+        $state.go('tab.dash');
         //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
     }
 

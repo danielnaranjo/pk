@@ -74,7 +74,7 @@ app.factory("logFirebase", function($firebaseArray) {
     return $firebaseArray(ref);
 });
 
-app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth) {
+app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth, remoteServer, geoService) {
     /*
     {
         id:             String, //A unique identifier of geofence
@@ -147,6 +147,46 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
           }, function (reason) {
             $log.error('Removing geofences failed', reason);
           });
+        },
+        new:function(){
+          $log.info('Cargando nuevos points..');
+          remoteServer.getData('points')
+            .success(function(data) {
+              //
+              var points = [];
+              for(var i=0; i<data.results.length+1; i++){
+                $log.debug(angular.toJson(data.results[i]));
+                var point = {
+                    id:             UUIDjs.create().toString(),//data.results[i].geofence_id,
+                    latitude:       data.results[i].latitude,
+                    longitude:      data.results[i].longitude,
+                    radius:         data.results[i].radius,
+                    transitionType: data.results[i].notification.transitionType,
+                    notification: {
+                      id:             data.results[i].notification.notification_id,
+                      title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
+                      text:           data.results[i].notification.message||'Tenemos una promo para ti!',
+                      vibration:      [0], // si paga mas, tiene vibracion personalizado! -> data.results[i].notification.vibration||
+                      smallIcon:      'res://icon', // transparente
+                      icon:           'file://img/icono.png',
+                      openAppOnClick: data.results[i].notification.openAppOnClick||true,
+                      data: {
+                        raw: data.results[i].notification.data
+                      }
+                    }
+                };
+                //$log.debug(angular.toJson(point));
+                points.push(point);
+              }
+              //$localstorage.setObject('points');
+              $log.debug('Total', data.records);
+              $log.debug(points);
+              //
+            })
+            .error(function(err){
+              $log.error('remoteServer > new', err);
+            });
+          //
         }
     };
 });
@@ -324,7 +364,7 @@ app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $locals
 
 app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform, ConnectivityMonitor, remoteServer){
   return {
-    sync: function(){
+    /*sync: function(){
       if(ConnectivityMonitor.isOnline()){
         $localstorage.remove('points');
         remoteServer.getData('points')
@@ -337,7 +377,7 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
         $localstorage.setObject('points', points );
         $log.debug('sync');
       }
-    },
+    },*/
     openBrowser : function(Url){
       var options = {
               location: 'yes',
@@ -359,7 +399,6 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
             firstUsage: true,
             slider:true,
         }
-        $localstorage.setObject('userDevice', userDevice );
         $localstorage.setObject('userDevice', userDevice );
     }
   }

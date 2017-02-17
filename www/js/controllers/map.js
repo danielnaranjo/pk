@@ -20,7 +20,8 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
         }
       };
       //remoteServer.getData('points/null/'+$scope.coords.latitude+'/'+$scope.coords.longitude)
-      remoteServer.getData('points')
+      remoteServer.getData('nearby/'+$scope.coords.latitude+'/'+$scope.coords.longitude+'/5000')
+      //remoteServer.getData('points')
       .success(function(data) {
           $scope.timeline=data.results;
           $scope.zoom=16;

@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush) {
+app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, localstorage) {
     $scope.detener = function(){
         // Previene el boton de Volver
         $ionicHistory.nextViewOptions({
@@ -7,9 +7,9 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, 
     };
 
 	if ($ionicAuth.isAuthenticated()) {
-		var points = 0;//$localstorage.getObject('points');
+		var points = $localstorage.getObject('points');
 		if(points.length>0){
-			$state.go('tab.maps');
+			$state.go('tab.timeline');
 		} else {
 			$state.go('app.dash');
 		}

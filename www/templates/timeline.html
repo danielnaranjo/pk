@@ -1,32 +1,40 @@
-<ion-view view-title="Timeline" class="dark" ng-init="getAll()">
+<ion-view view-title="Timeline" class="dark" ng-init="ubicar()">
   <ion-content>
     <ion-refresher pulling-text="Refrescar" on-refresh="doRefresh()"></ion-refresher>
     <ul class="timeline">
       <li ng-repeat="i in timeline">
+
         <div
-          ng-hide="i.img"
           class="timeline-thumb bg-color-yellow timeline-icon">
           <i class="{{i.campaign.category.icon}}"></i>
         </div>
-        <img
+
+        <!--<img
           ng-show="item.img"
           src="{{i.img}}"
           alt="{{i.title}}"
-          class="timeline-thumb" />
+          class="timeline-thumb" />-->
+
         <div class="timeline-item">
-          <h4>{{i.campaign.name}}</h4>
+          <h4>{{i.label}}</h4>
           <p>{{i.notification.message}}</p>
+
           <div class="timeline-stats">
-            <i class="{{i.campaign.category.icon}}"></i> 
-            {{i.actions.ratings.total||'0'}}
+          
+            <i class="ion-ios-chatboxes-outline"></i> 
+            {{i.actions.comments.total||'0'}}
+          
             <i class="ion-thumbsup"></i> 
             {{i.actions.votes.upvotes||'0'}}
+
             <i class="ion-map"></i> 
-            <span ng-show="latitude">{{i.latitude}} {{i.longitude}}</span>
+            {{i.distance | number:0}} mts
+          
             <span class="pos-absolute-right">
               <i class="ion-ios-clock"></i> 
               <span am-time-ago="i.campaign.validFrom"></span>
             </span>
+
           </div>
         </div>
       </li>
