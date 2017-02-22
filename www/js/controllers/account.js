@@ -2,8 +2,8 @@ app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout
   $scope.$on('$ionicView.enter', function(){
 
     // Exchange's services
-    $scope.lat = Exchange.data.lat;
-    $scope.long = Exchange.data.long;
+    //$scope.lat = Exchange.data.lat;
+    //$scope.long = Exchange.data.long;
 
     $scope.usuario=$ionicUser.social.twitter.data.full_name||$ionicUser.social.facebook.data.full_name;
     $scope.fotoPerfil=$ionicUser.social.twitter.data.profile_picture||$ionicUser.social.facebook.data.profile_picture;

@@ -151,36 +151,37 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
         new:function(){
           $log.info('Cargando nuevos points..');
           remoteServer.getData('points')
-            .success(function(data) {
+            .success(function(res) {
               //
+              $localstorage.clear('points');
               var points = [];
-              for(var i=0; i<data.results.length+1; i++){
-                $log.debug(angular.toJson(data.results[i]));
+              for(var i=0; i<res.results.length+1; i++){
+                //$log.debug(angular.toJson(res.results[i]));
                 var point = {
-                    id:             UUIDjs.create().toString(),//data.results[i].geofence_id,
-                    latitude:       data.results[i].latitude,
-                    longitude:      data.results[i].longitude,
-                    radius:         data.results[i].radius,
-                    transitionType: data.results[i].notification.transitionType,
+                    id:             UUIDjs.create().toString(),//res.results[i].geofence_id,
+                    latitude:       res.results[i].latitude,
+                    longitude:      res.results[i].longitude,
+                    radius:         res.results[i].radius,
+                    transitionType: res.results[i].notification.transitionType,
                     notification: {
-                      id:             data.results[i].notification.notification_id,
+                      id:             res.results[i].notification.notification_id,
                       title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
-                      text:           data.results[i].notification.message||'Tenemos una promo para ti!',
-                      vibration:      [0], // si paga mas, tiene vibracion personalizado! -> data.results[i].notification.vibration||
+                      text:           res.results[i].notification.message||'Tenemos una promo para ti!',
+                      vibration:      [0], // si paga mas, tiene vibracion personalizado! -> res.results[i].notification.vibration||
                       smallIcon:      'res://icon', // transparente
                       icon:           'file://img/icono.png',
-                      openAppOnClick: data.results[i].notification.openAppOnClick||true,
+                      openAppOnClick: res.results[i].notification.openAppOnClick||true,
                       data: {
-                        raw: data.results[i].notification.data
+                        raw: res.results[i].notification.data
                       }
                     }
                 };
                 //$log.debug(angular.toJson(point));
                 points.push(point);
               }
-              //$localstorage.setObject('points');
-              $log.debug('Total', data.records);
-              $log.debug(points);
+              $localstorage.setObject('points');
+              $log.debug('Total', res.records);
+              //$log.debug(points);
               //
             })
             .error(function(err){

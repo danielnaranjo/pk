@@ -1,4 +1,4 @@
-app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $ionicUser, $ionicAuth, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config, remoteServer) {
+app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $cordovaGeolocation, $state, $localstorage, $ionicHistory, ConnectivityMonitor, $log, Config, remoteServer) {
 
   // monitor de conexion a internet
   ConnectivityMonitor.startWatching();

@@ -29,24 +29,26 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
     }
   });
 
+  $ionicPlatform.ready(function() {
     //version
-    $ionicPlatform.ready(function() {
-        appVersion.check();
-    });
-    // Geofences
-    $ionicPlatform.ready(function(){
-        Geofences.new();
-    });
-    // Get user location
-    $ionicPlatform.ready(function(){
-        geoService.getPosition();
-    });
+    appVersion.check();
+  });
 
-    // si esta autenticado, ir a tareas
-    if ($ionicAuth.isAuthenticated()) {
-        $state.go('tab.dash');
-        //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
-    }
+  $ionicPlatform.ready(function() {
+    // Geofences
+    Geofences.check();
+  });
+
+  $ionicPlatform.ready(function() {
+    // Get user location
+    geoService.getPosition(); 
+  });  
+
+  // si esta autenticado, ir a tareas
+  if ($ionicAuth.isAuthenticated()) {
+      $state.go('tab.dash');
+      //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
+  }
 
 })
 

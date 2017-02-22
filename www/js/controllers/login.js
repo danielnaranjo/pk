@@ -9,26 +9,26 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, 
 	if ($ionicAuth.isAuthenticated()) {
 		var points = $localstorage.getObject('points');
 		if(points.length>0){
-			$state.go('tab.timeline');
+			$state.go('tab.dash'); //timeline
 		} else {
 			$state.go('app.dash');
 		}
 	}
 
   $scope.login = function(provider){
-      switch (provider) {
-        case provider='facebook':
-          $scope.withFacebook();
-        break;
-        case provider='google':
-          $scope.withGoogle();
-        break;
-        case provider='twitter':
-          $scope.withTwitter();
-        break;
-        default:
-          $log.error('Metodo desconocido, por favor, verifique');
-      }
+    switch (provider) {
+      case provider='facebook':
+        $scope.withFacebook();
+      break;
+      case provider='google':
+        $scope.withGoogle();
+      break;
+      case provider='twitter':
+        $scope.withTwitter();
+      break;
+      default:
+        $log.error('Metodo desconocido, por favor, verifique');
+    }
 	};// login
 
 $scope.withFacebook = function(){
@@ -46,7 +46,7 @@ $scope.withFacebook = function(){
       }).then(function(t) {
           //$log.log('Token saved:', t.token);
       });
-        $state.go('tab.maps');
+        $state.go('tab.dash');
         $log.info('loginCtrl > withFacebook()');
       }
     }).catch (function(err){
@@ -71,7 +71,7 @@ $scope.withGoogle = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('tab.maps');
+        $state.go('tab.dash');
         $log.info('loginCtrl > withGoogle()');
       }
     }).catch (function(err){
@@ -96,7 +96,7 @@ $scope.withTwitter = function(){
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
         });
-        $state.go('tab.maps');
+        $state.go('tab.dash');
         $log.info('loginCtrl > withTwitter()');
       }
     }).catch (function(err){
