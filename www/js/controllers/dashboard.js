@@ -3,9 +3,9 @@ app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLo
     $scope.$on('$ionicView.enter', function(){
 
       //$ionicPlatform.ready(function(){
-        $log.debug('@points',$localstorage.getObject('points'));
-        Geofences.new();
-        $log.debug('@@points',$localstorage.getObject('points'));
+        //$log.debug('@points',$localstorage.getObject('points'));
+        //Geofences.new();
+        //$log.debug('@@points',$localstorage.getObject('points')); 
 
       //});
 
