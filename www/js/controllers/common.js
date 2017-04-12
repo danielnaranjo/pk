@@ -1,13 +1,11 @@
-app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, ConnectivityMonitor, BatteryMonitor, isUserLogged, $ionicAuth, $ionicUser, updateApp, appVersion) {
+app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, ConnectivityMonitor, BatteryMonitor, isUserLogged, $ionicAuth, $ionicUser, updateApp, appVersion, $localstorage) {
 
     ConnectivityMonitor.startWatching();
     BatteryMonitor.startWatching();
     isUserLogged.check();
 
-
     $scope.salir = function(){
         $ionicAuth.logout();
-        Exchange.data = '';
         $ionicPush.unregister();
         $log.log('AppCtrl > Salir() > ionicAuth', $ionicUser);
         $state.go('login');

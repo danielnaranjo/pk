@@ -49,6 +49,11 @@ app.factory("Items", function($firebaseArray, $log, $firebaseUtils, $log) {
   return rootRef;
 });
 
+app.factory("logFirebase", function($firebaseArray) {
+    var ref = firebase.database().ref();
+    return $firebaseArray(ref);
+});
+
 app.factory('$localstorage', function($window, $log) {
     return {
         set: function(key, value) {
@@ -67,11 +72,6 @@ app.factory('$localstorage', function($window, $log) {
             $window.localStorage.removeItem(key);
         }
     };
-});
-
-app.factory("logFirebase", function($firebaseArray) {
-    var ref = firebase.database().ref();
-    return $firebaseArray(ref);
 });
 
 app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth, remoteServer, geoService) {
@@ -152,36 +152,45 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
           $log.info('Cargando nuevos points..');
           remoteServer.getData('points')
             .success(function(res) {
-              //
+              $log.debug('How many Pooock are available?', res.length );
+              //$log.debug('This is Pooock', res);
+              
+              //var points = angular.toJson(res);
+              //for(var i=0; i<res.length+1; i++){
+              //  $log.debug(res[i]);
+              //};
+
               $localstorage.clear('points');
               var points = [];
-              for(var i=0; i<res.results.length+1; i++){
-                //$log.debug(angular.toJson(res.results[i]));
+              for(var i=0; i<res.length+1; i++){
+                $log.debug(angular.toJson(res[i]));
+                /*
                 var point = {
                     id:             UUIDjs.create().toString(),//res.results[i].geofence_id,
-                    latitude:       res.results[i].latitude,
-                    longitude:      res.results[i].longitude,
-                    radius:         res.results[i].radius,
-                    transitionType: res.results[i].notification.transitionType,
+                    latitude:       res[i].latitude,
+                    longitude:      res[i].longitude,
+                    radius:         res[i].radius,
+                    transitionType: res[i].notification.transitionType,
                     notification: {
-                      id:             res.results[i].notification.notification_id,
+                      id:             res[i].notification.notification_id,
                       title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
-                      text:           res.results[i].notification.message||'Tenemos una promo para ti!',
-                      vibration:      [0], // si paga mas, tiene vibracion personalizado! -> res.results[i].notification.vibration||
+                      text:           res[i].notification.message||'Tenemos un algo para ti!',
+                      vibration:      [res[i].notification.vibration||0], // si paga mas, tiene vibracion personalizado! -> res.results[i].notification.vibration||
                       smallIcon:      'res://icon', // transparente
                       icon:           'file://img/icono.png',
-                      openAppOnClick: res.results[i].notification.openAppOnClick||true,
+                      openAppOnClick: res[i].notification.openAppOnClick||true,
                       data: {
-                        raw: res.results[i].notification.data
+                        raw: res[i].notification.data
                       }
                     }
                 };
-                //$log.debug(angular.toJson(point));
                 points.push(point);
+                */
+                points.push(res[i]);
               }
+
               $localstorage.setObject('points');
-              $log.debug('Total', res.records);
-              //$log.debug(points);
+              $log.debug('This is Pooock', res);
               //
             })
             .error(function(err){
@@ -295,12 +304,31 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
               //http://www.theodo.fr/blog/2016/03/its-alive-get-your-ionic-app-to-update-automatically-part-2/
               $ionicPopup.show({
                   title: 'Actualización disponible',
-                  subTitle: 'Tenemos una nueva version con nuevas caracteriticas y funciones, quieres descargarla y probarla?',
+                  subTitle: 'Nuevas caracteristicas y funciones extras, quieres descargarla y probarla?',
                   buttons: [
                   { text: 'Cancelar' },
                   { text: 'Descargar Ahora',
                       onTap: function(e) {
-                        updateApp.doUpdate();
+                        $ionicLoading.show({
+                            template: 'Descargando, por favor, espere..',
+                            duration: 5000
+                        });
+                        $log.debug('Actualizando version..');
+                        $ionicDeploy.download().then(function(d) {
+                            $ionicLoading.show({
+                                template: 'Actualizando, por favor, espere..',
+                                duration: 5000
+                            });
+                            //$log.info('Progress... ');
+                            return $ionicDeploy.extract();
+                        }).then(function(d) {
+                            $ionicLoading.show({
+                                template: 'Versión actualizada! Reiniciando..',
+                                duration: 5000
+                            });
+                            $log.info('**** Update Success!');
+                            return $ionicDeploy.load();
+                        });
                       }
                   }],
               });
@@ -309,53 +337,33 @@ app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicL
       }, function(err) {
           $log.error('**** Ionic Deploy: Unable to check for updates', err);
       });
-    },
-    doUpdate: function(){
-      $ionicLoading.show({
-          template: 'Descargando, por favor, espere..',
-          duration: 5000
-      });
-      $log.debug('Actualizando version..');
-      $ionicDeploy.download().then(function(d) {
-          $ionicLoading.show({
-              template: 'Actualizando, por favor, espere..',
-              duration: 5000
-          });
-          //$log.info('Progress... ');
-          return $ionicDeploy.extract();
-      }).then(function(d) {
-          $ionicLoading.show({
-              template: 'Versión actualizada! Reiniciando..',
-              duration: 5000
-          });
-          $log.info('**** Update Success!');
-          return $ionicDeploy.load();
-      });
     }
   }
 });
 
-app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $localstorage){
+app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $localstorage, $ionicPlatform){
   return {
-    check:function(){
+    check: function(){
       //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
-        $rootScope.device = ionic.Platform.device();
-        $rootScope.isWebView = ionic.Platform.isWebView();
-        cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
-          $rootScope.version = version;
-          $log.info('device@info', $rootScope.version, $rootScope.device.platform);
-      }, function(error){
-          $log.error('getVersionNumber failed', angular.toJson(error));
-      });
-      var userDevice = {
-        os: $rootScope.device.platform,
-        version: $rootScope.device.version,
-        webView: $rootScope.isWebView,
-        app_version: $rootScope.version,
-        cordova_version: $rootScope.device.cordova
-      }
-      $localstorage.setObject('userDevice', userDevice );
-      $log.debug('userDevice', angular.toJson(userDevice));
+      return $ionicPlatform.ready( function(){
+          $rootScope.device = ionic.Platform.device();
+          $rootScope.isWebView = ionic.Platform.isWebView();
+          cordova.getAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
+            $rootScope.version = version;
+            $log.info('device@info', $rootScope.version, $rootScope.device.platform);
+        }, function(error){
+            $log.error('getVersionNumber failed', angular.toJson(error));
+        });
+        var userDevice = {
+          os: $rootScope.device.platform,
+          version: $rootScope.device.version,
+          webView: $rootScope.isWebView,
+          app_version: $rootScope.version,
+          cordova_version: $rootScope.device.cordova
+        }
+        $localstorage.setObject('userDevice', userDevice );
+        $log.debug('userDevice', angular.toJson(userDevice));
+      })
     },
     getPlatform: function() {
       return $localstorage.getObject('userDevice');

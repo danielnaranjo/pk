@@ -1,19 +1,10 @@
-app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, localstorage) {
+app.controller('LoginCtrl', function ($scope, $ionicAuth, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, $localstorage) {
     $scope.detener = function(){
         // Previene el boton de Volver
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
     };
-
-	if ($ionicAuth.isAuthenticated()) {
-		var points = $localstorage.getObject('points');
-		if(points.length>0){
-			$state.go('tab.dash'); //timeline
-		} else {
-			$state.go('app.dash');
-		}
-	}
 
   $scope.login = function(provider){
     switch (provider) {

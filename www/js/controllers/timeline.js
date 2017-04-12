@@ -1,9 +1,4 @@
-app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, $localstorage, geoService) {
-
-// Exchange's services
-  //$scope.lat = Exchange.data.lat;
-  //$scope.long = Exchange.data.long;
-  //$log.info('Exchange at timeline', angular.toJson(Exchange.data));
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, geoService) {
 
   $scope.getAll = function(){
     $ionicLoading.show();
@@ -18,10 +13,9 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
       $log.error(err);
       $ionicLoading.hide();
     });
-  }
+  };
 
-
-$scope.ubicar = function(){
+  $scope.ubicar = function(){
     $log.log('ubicar');
     geoService.getPosition().then(function(position) {
       $scope.coords = position.coords;
@@ -40,9 +34,9 @@ $scope.ubicar = function(){
   };
 
   $scope.doRefresh = function() {
-        $scope.getAll();
-        $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply()
-    };
+    $scope.getAll();
+    $scope.$broadcast('scroll.refreshComplete');
+    $scope.$apply()
+  };
 
 })
