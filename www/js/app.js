@@ -1,5 +1,3 @@
-var db = null;
-
 var app = angular.module('starter', [
   'ionic',
   'ionic.cloud',
