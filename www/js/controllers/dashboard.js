@@ -33,4 +33,4 @@ app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLo
       });
 
     });
-})
+});
