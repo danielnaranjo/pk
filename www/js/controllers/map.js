@@ -1,8 +1,5 @@
 app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $cordovaGeolocation, $state, $ionicHistory, ConnectivityMonitor, $log, Config, remoteServer, $localstorage) {
 
-  // monitor de conexion a internet
-  ConnectivityMonitor.startWatching();
-
   $ionicLoading.show();
   $scope.zoom=5;
 
@@ -19,7 +16,6 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
           longitude: $scope.long
         }
       };
-      //remoteServer.getData('points/null/'+$scope.coords.latitude+'/'+$scope.coords.longitude)
       remoteServer.getData('nearby/'+$scope.coords.latitude+'/'+$scope.coords.longitude+'/5000')
       //remoteServer.getData('points')
       .success(function(data) {

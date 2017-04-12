@@ -149,6 +149,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: 'SetupCtrl'
   });
 
-  $urlRouterProvider.otherwise('/slider');
+  $urlRouterProvider.otherwise('/dash');//slider
 
 });

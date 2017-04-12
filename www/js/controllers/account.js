@@ -20,7 +20,5 @@ app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout
     });
     //
 
-    appVersion.check();
-    $scope.version=$rootScope.version;
   });
 });

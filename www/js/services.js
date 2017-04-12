@@ -36,24 +36,6 @@ app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation, $log) {
   };
 });
 
-app.factory("Items", function($firebaseArray, $log, $firebaseUtils, $log) {
-  // See https://firebase.google.com/docs/web/setup#project_setup for how to
-  // auto-generate this config
-  var config = {
-    apiKey: "AIzaSyCA2P4MnVACn6_jvbj8aupCmDSlOHfY8JY",
-    authDomain: "pooock.firebaseapp.com", //260441399546
-    databaseURL: "https://pooock-1150.firebaseio.com"
-  };
-  firebase.initializeApp(config);
-  var rootRef = firebase.database().ref();
-  return rootRef;
-});
-
-app.factory("logFirebase", function($firebaseArray) {
-    var ref = firebase.database().ref();
-    return $firebaseArray(ref);
-});
-
 app.factory('$localstorage', function($window, $log) {
     return {
         set: function(key, value) {
@@ -201,71 +183,6 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
     };
 });
 
-
-
-app.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, $ionicPopup, $log){
-    //http://www.joshmorony.com/part-3-advanced-google-maps-integration-with-ionic-and-remote-data/
-    return {
-        isOnline: function(){
-            if(ionic.Platform.isWebView()){
-                return $cordovaNetwork.isOnline();
-            } else {
-                return navigator.onLine;
-            }
-        },
-        isOffline: function(){
-            if(ionic.Platform.isWebView()){
-                return !$cordovaNetwork.isOnline();
-            } else {
-                return !navigator.onLine;
-            }
-        },
-        startWatching: function(){
-            if(ionic.Platform.isWebView()){
-                $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-                  //$log.log("went online");
-                });
-                $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-                  //$log.log("went offline");
-                });
-            } else {
-                window.addEventListener("online", function(e) {
-                  //$log.log("went online");
-                }, false);
-                window.addEventListener("offline", function(e) {
-                  //$log.log("went offline");
-                }, false);
-            }
-        }
-    };
-});
-
-app.factory('BatteryMonitor', function($rootScope, $cordovaBatteryStatus, $ionicPopup, $ionicPlatform, $localstorage, $log){
-    return {
-        startWatching: function(){
-            $ionicPlatform.ready(function() {
-                $rootScope.$on('$cordovaBatteryStatus:status', function(event, args){
-                    var batteryLevel = args.level;
-                    if(batteryLevel < 20){
-                        var confirmPopup = $ionicPopup.show({
-                            title: 'Pooock!',
-                            template: 'Tienes '+ batteryLevel +'% de bateria',
-                            buttons: [{
-                                text: 'Ok',
-                                type: 'button-balanced pipol_verde',
-                                onTap: function(e) {
-                                  //$log.info('Poca bateria! ' + batteryLevel +'%');
-                                }//onTap
-                            }]
-                        });
-                    }
-                    //$log.debug('cordovaBatteryStatus', angular.toJson(args));
-                });
-            });
-        }
-    };
-});
-
 app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $state, $ionicPlatform){
     return {
         check: function(){
@@ -373,20 +290,6 @@ app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $locals
 
 app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform, ConnectivityMonitor, remoteServer){
   return {
-    /*sync: function(){
-      if(ConnectivityMonitor.isOnline()){
-        $localstorage.remove('points');
-        remoteServer.getData('points')
-          .success(function(data) {
-            $scope.timeline=data.result;
-          })
-          .error(function(err){
-            $log.error(err);
-          });
-        $localstorage.setObject('points', points );
-        $log.debug('sync');
-      }
-    },*/
     openBrowser : function(Url){
       var options = {
               location: 'yes',
