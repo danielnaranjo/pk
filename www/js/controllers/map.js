@@ -1,4 +1,4 @@
-app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $cordovaGeolocation, $state, $ionicHistory, ConnectivityMonitor, $log, Config, remoteServer, $localstorage) {
+app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exchange, geoService, $cordovaGeolocation, $state, $ionicHistory, $log, Config, remoteServer, $localstorage) {
 
   $ionicLoading.show();
   $scope.zoom=5;
@@ -34,9 +34,7 @@ app.controller('MapaCtrl', function($scope, $timeout, $ionicLoading, $http, Exch
   };
 
   $scope.mapa = function(){
-    $scope.$on('$ionicView.enter', function(){
-      $scope.ubicar();
-    });
+    $scope.ubicar();
   }; // mapa
 
 })

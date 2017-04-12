@@ -1,4 +1,4 @@
-app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, ConnectivityMonitor, BatteryMonitor, isUserLogged, $ionicAuth, $ionicUser, updateApp, appVersion, $localstorage) {
+app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, isUserLogged, $ionicAuth, $ionicUser, updateApp, appVersion, $localstorage) {
 
     isUserLogged.check();
 

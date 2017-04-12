@@ -1,12 +1,10 @@
 app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLoading, $ionicPopup, Exchange, locationService, geoService, Config, $log, Geofences, $localstorage) {
     
-    $scope.$on('$ionicView.enter', function(){
 
       //$ionicPlatform.ready(function(){
         //$log.debug('@points',$localstorage.getObject('points'));
         //Geofences.new();
         //$log.debug('@@points',$localstorage.getObject('points')); 
-
       //});
 
       geoService.getPosition()
@@ -32,5 +30,4 @@ app.controller('DashCtrl', function($scope, $rootScope, $ionicPlatform, $ionicLo
         $log.error('Dash > getCurrentPosition: ',err.message);
       });
 
-    });
 });
