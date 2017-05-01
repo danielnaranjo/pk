@@ -14,7 +14,7 @@ app.constant("Config", {
   "Server": "https://pooock.com/admin/index.php/api/data", // https://pooock.stamplayapp.com/api/cobject/v1
 })
 
-app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {
+app.run(function($ionicPlatform, $rootScope, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -29,7 +29,7 @@ app.run(function($ionicPlatform, $rootScope, appVersion, $ionicPopup, $window, $
 
   $ionicPlatform.ready(function() {
     //version
-    appVersion.check();
+    //appVersion.check();
   });
 
   $ionicPlatform.ready(function() {
