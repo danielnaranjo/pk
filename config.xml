@@ -78,11 +78,8 @@
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <plugin name="cordova-plugin-geolocation"/>
-  <plugin name="cordova-plugin-app-version"/>
-  <plugin name="cordova-plugin-geofence" spec="~0.6.0"/>
-  <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0"/>
-  <plugin name="cordova-plugin-console" spec="~1.0.5"/>
-  <plugin name="cordova-plugin-splashscreen" spec="~4.0.1"/>
-  <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
-  <plugin name="ionic-plugin-deploy" spec="~0.6.5"/>
+  <plugin name="cordova-plugin-geofence"/>
+  <plugin name="cordova-plugin-inappbrowser"/>
+  <plugin name="cordova-plugin-console"/>
+  <plugin name="cordova-plugin-splashscreen"/>
 </widget>

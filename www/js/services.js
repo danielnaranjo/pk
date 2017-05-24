@@ -39,50 +39,32 @@ app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation, $log) {
 app.factory('$localstorage', function($window, $log) {
     return {
         set: function(key, value) {
-            $window.localStorage[key] = value;
+          $window.localStorage[key] = value;
         },
         get: function(key, defaultValue) {
-            return $window.localStorage[key] || defaultValue;
+          return $window.localStorage[key] || defaultValue;
         },
         setObject: function(key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
+          $window.localStorage[key] = JSON.stringify(value);
         },
-        getObject: function(key) {
-            return JSON.parse($window.localStorage[key] || '{}');
+        getObject: function(key) { //$log.debug('key', key);
+          return JSON.parse($window.localStorage[key] || '{}');
         },
         clear: function(key){
-            $window.localStorage.removeItem(key);
+          $window.localStorage.removeItem(key);
         }
     };
 });
 
-app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth, remoteServer, geoService) {
-    /*
-    {
-        id:             String, //A unique identifier of geofence
-        latitude:       Number, //Geo latitude of geofence
-        longitude:      Number, //Geo longitude of geofence
-        radius:         Number, //Radius of geofence in meters
-        transitionType: Number, //Type of transition 1 - Enter, 2 - Exit, 3 - Both
-        notification: {         //Notification object
-            id:             Number, //optional should be integer, id of notification
-            title:          String, //Title of notification
-            text:           String, //Text of notification
-            smallIcon:      String, //Small icon showed in notification area, only res URI
-            icon:           String, //icon showed in notification drawer
-            openAppOnClick: Boolean,//is main app activity should be opened after clicking on notification
-            vibration:      [Integer], //Optional vibration pattern - see description
-            data:           Object  //Custom object associated with notification
-        }
-    }
-    */
+app.factory('Geofences', function($http, Config, $ionicPlatform, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth, remoteServer, geoService) {
     return {
         check: function(){
+          return $ionicPlatform.ready( function(){
             var points = $localstorage.getObject('points');
-            //console.log('app > geofences > points', points, angular.toJson(points));
+            //$log.log('Line 64: app > geofences > points', points, angular.toJson(points));
             // run when is already done!
             if(points.length>0){
-              $log.log('app > geofences > points loaded', points.length);
+              $log.log('Line 67: app > geofences > points loaded', points.length);
               $window.geofence.addOrUpdate(points);
               $window.geofence.onTransitionReceived = function (geofences) {
                   //$log.log(geofences);
@@ -100,7 +82,7 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
                           duration: 2000
                         });
                         if ($ionicAuth.isAuthenticated()) {
-                          //$state.go('app.tomar', { branch_id: geo.notification.data.branch_id, task_id: geo.notification.data.task_id });
+                          //$state.go('app.timeline', { geofence_id: geo.notification.data.geofence_id, notification_id: geo.notification.data.notification_id, behavior_id: geo.notification.data.behavior_id });
                           $log.debug('geofences > $rootScope > $apply', angular.toJson(geo));
                         } else {
                           $log.error('geofences required your logged');
@@ -117,67 +99,60 @@ app.factory('Geofences', function($http, Config, $localstorage, $log, $window, $
                     }
                   };
               };
-
               $window.geofence.initialize(function () {
                 $log.info("geofence > Successful initialization");
               });
             }
-        },
-        remove: function(){
-          $window.geofence.removeAll().then(function () {
-            $log.debug('All geofences successfully removed.');
-          }, function (reason) {
-            $log.error('Removing geofences failed', reason);
           });
         },
-        new:function(){
-          $log.info('Cargando nuevos points..');
-          remoteServer.getData('points')
-            .success(function(res) {
-              $log.debug('How many Pooock are available?', res.length );
-              //$log.debug('This is Pooock', res);
-              
-              // var points = angular.toJson(res);
-              // for(var i=0; i<res.length+1; i++){
-              //  $log.debug(res[i]);
-              // };
-
-              // $localstorage.clear('points');
+        getting:function(){
+          return $ionicPlatform.ready( function(){
+            //$log.info('Cargando nuevos points..');
+            remoteServer.getData('points')
+            .success(function(response) {
+              $log.debug('Line 142: How many Pooock are available?', response.length); 
               var points = [];
-              for(var i=0; i<res.length+1; i++){
-                $log.debug(angular.toJson(res[i]));
+              for(var i=0; i<response.length; i++){
+                //$log.debug('Line 116: ',angular.toJson(response[i]));
                 var point = {
-                    id:             UUIDjs.create().toString(),//res.results[i].geofence_id,
-                    latitude:       res[i].latitude,
-                    longitude:      res[i].longitude,
-                    radius:         res[i].radius,
-                    transitionType: 1,//res[i].notification.transitionType,
-                    notification: {
-                      id:             1,//res[i].notification.notification_id,
-                      title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
-                      text:           res[i].notification.message||'Tenemos un algo para ti!',
-                      vibration:      [res[i].notification.vibration||0], // si paga mas, tiene vibracion personalizado! -> res.results[i].notification.vibration||
-                      smallIcon:      'res://icon', // transparente
-                      icon:           'file://img/icono.png',
-                      openAppOnClick: res[i].notification.openAppOnClick||true,
-                      data: {
-                        raw: res[i].notification.data
-                      }
+                  id:             UUIDjs.create().toString(),//response[i].geofence_id,
+                  latitude:       response[i].latitude,
+                  longitude:      response[i].longitude,
+                  radius:         response[i].radius||100,
+                  transitionType: response[i].transitionType||1,
+                  notification: {
+                    id:             response[i].notification_id,
+                    title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
+                    text:           response[i].message||'Tenemos un algo para ti!',
+                    vibration:      [response[i].vibration||0], // si paga mas, tiene vibracion personalizado!
+                    smallIcon:      'res://icon', // transparente
+                    icon:           'file://img/pooock.png',
+                    openAppOnClick: response[i].openAppOnClick||true,
+                    data: {
+                      geofence_id: response[i].geofence_id,
+                      notification_id: response[i].notification_id,
+                      behavior_id: response[i].behavior_id
                     }
+                  }
                 };
+                //$log.debug('Line 138: ',response[i].geofence_id, angular.toJson(point) );
                 points.push(point);
-                //points.push(res[i]);
               }
-
-              $localstorage.setObject('points');
-              //$log.debug('This is Pooock', res);
-              //
+              $localstorage.setObject('points', points);
+              $log.debug('Line 142: $localstorage.getObject', angular.toJson($localstorage.getObject('points')));
             })
             .error(function(err){
               $log.error('remoteServer > new', err);
             });
-          //
-        }
+        });
+      },//new
+      remove: function(){
+        $window.geofence.removeAll().then(function () {
+          $log.debug('All geofences successfully removed.');
+        }, function (reason) {
+          $log.error('Removing geofences failed', reason);
+        });
+      }//remove
     };
 });
 

@@ -14,7 +14,7 @@ app.constant("Config", {
   "Server": "https://pooock.com/admin/index.php/api/data", // https://pooock.stamplayapp.com/api/cobject/v1
 })
 
-app.run(function($ionicPlatform, $rootScope, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $localstorage, $state, $ionicAuth) {
+app.run(function($ionicPlatform, $rootScope, $http, remoteServer, $ionicPopup, $window, $log, $ionicLoading, Geofences, geoService, $state, $ionicAuth) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -34,21 +34,58 @@ app.run(function($ionicPlatform, $rootScope, $ionicPopup, $window, $log, $ionicL
 
   $ionicPlatform.ready(function() {
     // Geofences
+    Geofences.getting();
     Geofences.check();
+    // $http.get('https://pooock.com/admin/index.php/api/data/points')
+    //   .success(function(response) {
+    //     $log.debug('How many Pooock are available?', response.length);
+    //     var points = [];
+    //     for(var i=0; i<response.length; i++){
+    //       //$log.debug(angular.toJson(response[i]));
+    //       var point = {
+    //         id:             UUIDjs.create().toString(),//response[i].geofence_id,
+    //         latitude:       response[i].latitude,
+    //         longitude:      response[i].longitude,
+    //         radius:         response[i].radius||100,
+    //         transitionType: response[i].transitionType||1,
+    //         notification: {
+    //           id:             response[i].notification_id,
+    //           title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
+    //           text:           response[i].message||'Tenemos un algo para ti!',
+    //           vibration:      [response[i].vibration||0], // si paga mas, tiene vibracion personalizado!
+    //           smallIcon:      'response://icon', // transparente
+    //           icon:           'file://img/pooock.png',
+    //           openAppOnClick: response[i].openAppOnClick||true,
+    //           data: {
+    //             geofence_id: response[i].geofence_id,
+    //             notification_id: response[i].notification_id,
+    //             behavior_id: response[i].behavior_id
+    //           }
+    //         }
+    //       };
+    //       $log.debug(response[i].geofence_id, angular.toJson(point) );
+    //       points.push(point);
+    //     }
+    //     $log.info('res', angular.toJson(points));
+    //     $localstorage.setObject('points');
+    //   })
+    //   .error(function(err){
+    //     $log.error('remoteServer > new', err);
+    //   });
   });
 
   $ionicPlatform.ready(function() {
     // Get user location
-    geoService.getPosition(); 
+    //geoService.getPosition(); 
   });  
 
   // si esta autenticado, ir a tareas
   if ($ionicAuth.isAuthenticated()) {
-      $state.go('tab.dash');
-      //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
+    $state.go('tab.dash');
+    //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
   }
 
-})
+});
 
 app.config(function($compileProvider){
     // Add base64 to whiteList
