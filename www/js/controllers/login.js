@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Geofences, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, $localstorage) {
+app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, $localstorage, Geofences) {
     $scope.detener = function(){
         // Previene el boton de Volver
         $ionicHistory.nextViewOptions({
@@ -44,7 +44,7 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Geo
     //     $log.error('remoteServer > new', err);
     //   });
 
-    //Geofences.new();
+  // Geofences.getting();
 
   $scope.login = function(provider){
     switch (provider) {

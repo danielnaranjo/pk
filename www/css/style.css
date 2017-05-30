@@ -344,3 +344,13 @@ div.content, .dark, h2, h3, div.item, .bgFull {
     overflow: hidden;
     margin-right: 20px;
 }
+.loginBottom {
+    background-color: #f00;
+    height: auto;
+    min-height: 100% !important;
+} 
+.loginBottom img {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
