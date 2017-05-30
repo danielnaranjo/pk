@@ -1,11 +1,8 @@
 <ion-view view-title="Ajustes" class="dark">
   <ion-content class="padding">
         <div class="row">
-            <div class="col">
-                <h4>Hola {{usuario}}</h4>
-            </div>
-            <div class="col padding">
-                <img ng-src="{{fotoPerfil}}" class="fotoPerfil" >
+            <div class="col padding" style="text-align: center;">
+                <img ng-src="{{fotoPerfil}}" class="fotoPerfil" alt="{{usuario}}"><br>
             </div>
         </div>
         
@@ -21,10 +18,15 @@
             max-results="10">     
         </auto-complete>
     </tags-input>
+    
     <p>
         Quieres llegar a más personas a través de una experiencia personalizada?
         <a href="mailto:info@pooock.com" style="color:white">Contáctanos</a>
     </p>
+
+    <button class="button button-full icon-left ion-log-out" ng-controller="AppCtrl" ng-click="salir()">
+        Cerrar sesión
+    </button>
     
   </ion-content>
 </ion-view>

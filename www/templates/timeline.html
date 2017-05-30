@@ -1,23 +1,18 @@
 <ion-view view-title="Timeline" class="dark" ng-init="ubicar()">
   <ion-content>
     <ion-refresher pulling-text="Refrescar" on-refresh="doRefresh()"></ion-refresher>
+
     <ul class="timeline">
-      <li ng-repeat="i in timeline">
+      <li ng-repeat="i in timeline" ng-click="showCoupon(i)" on-swipe-left="showVotes(i)" on-swipe-right="showComments(i)">
 
         <div
           class="timeline-thumb bg-color-yellow timeline-icon">
           <i class="{{i.campaign.category.icon||'ion-location'}}"></i>
         </div>
 
-        <!--<img
-          ng-show="item.img"
-          src="{{i.img}}"
-          alt="{{i.title}}"
-          class="timeline-thumb" />-->
-
         <div class="timeline-item">
           <h4>{{i.label}}</h4>
-          <p>{{i.notification.message}}</p>
+          <p>{{i.notification.message||i.message}}</p>
 
           <div class="timeline-stats">
           
@@ -36,8 +31,10 @@
             </span>
 
           </div>
+
         </div>
       </li>
     </ul>
+
   </ion-content>
 </ion-view>

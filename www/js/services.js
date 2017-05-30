@@ -56,115 +56,6 @@ app.factory('$localstorage', function($window, $log) {
     };
 });
 
-// app.factory('Geofences', function($http, Config, $ionicPlatform, $localstorage, $log, $window, $state, $rootScope, $ionicLoading, $ionicAuth, remoteServer, geoService) {
-//     return {
-//         check : function(){
-//           //return $ionicPlatform.ready( function(){
-//             var pooock_points = $localstorage.getObject('pooock_points');
-//             $log.log('Line 64: app > geofences > points loaded', pooock_points.length);
-//             // run when is already done!
-//             if(pooock_points.length>0){
-
-//               $log.log('Line 67: app > geofences > points', pooock_points);
-
-//               $window.geofence.addOrUpdate(pooock_points)
-//               .then(function () {
-//                   $log.info('Geofence successfully added');
-//               }, function (error) {
-//                   $log.error('Adding geofence failed', error);
-//               });
-
-//               $window.geofence.onTransitionReceived = function (geofences) {
-//                   //$log.log(geofences);
-//                   if (geofences) {
-//                     $rootScope.$apply(function () {
-//                       geofences.forEach(function (geo) {
-//                         geo.notification = geo.notification || {
-//                           title: "Geofence transition",
-//                           text: "Without notification",
-//                           vibration: [0]// desactivado
-//                         };
-//                         $ionicLoading.show({
-//                           template: geo.notification.title + ": " + geo.notification.text,
-//                           noBackdrop: true,
-//                           duration: 2000
-//                         });
-//                         if ($ionicAuth.isAuthenticated()) {
-//                           //$state.go('app.timeline', { geofence_id: geo.notification.data.geofence_id, notification_id: geo.notification.data.notification_id, behavior_id: geo.notification.data.behavior_id });
-//                           $log.debug('geofences > $rootScope > $apply', angular.toJson(geo));
-//                         } else {
-//                           $log.error('geofences required your logged');
-//                           $state.go('login');
-//                         }
-//                       });
-//                     });
-//                   }
-//                   $window.geofence.onNotificationClicked = function (notificationData) {
-//                     //$log.log('notificationData',notificationData);
-//                     $log.info('notificationData',notificationData);
-//                     if (notificationData) {
-//                       $log.warn('onNotificationClicked', notificationData);
-//                     }
-//                   };
-//               };
-//               $window.geofence.initialize(function () {
-//                 $log.info("geofence > Successful initialization");
-//               });
-//             } 
-//           //});
-//         },
-//         getting : function(){
-//           //return $ionicPlatform.ready( function(){
-//             $log.info('Line 117: Services > Loading..');
-//             remoteServer.getData('points')
-//             .success(function(response) {
-//               //$log.debug('Line 1420: service', response.length); 
-//               var pooock_points = [];
-//               for(var i=0; i<response.length; i++){
-//                 //$log.debug('Line 116: ',angular.toJson(response[i]));
-//                 var pooock_point = {
-//                   id:             UUIDjs.create().toString(),//response[i].geofence_id,
-//                   latitude:       response[i].latitude,
-//                   longitude:      response[i].longitude,
-//                   radius:         response[i].radius||100,
-//                   transitionType: response[i].transitionType||1,
-//                   notification: {
-//                     id:             response[i].notification_id,
-//                     title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
-//                     text:           response[i].message||'Tenemos un algo para ti!',
-//                     vibration:      [response[i].vibration||0], // si paga mas, tiene vibracion personalizado!
-//                     smallIcon:      'res://icon', // transparente
-//                     icon:           'file://img/pooock.png',
-//                     openAppOnClick: response[i].openAppOnClick||true,
-//                     data: {
-//                       geofence_id: response[i].geofence_id,
-//                       notification_id: response[i].notification_id,
-//                       behavior_id: response[i].behavior_id
-//                     }
-//                   }
-//                 };
-//                 //$log.debug('Line 138: ',response[i].geofence_id, angular.toJson(point) );
-//                 pooock_points.push(pooock_point);
-//                 //$localstorage.setObject('pooock_points',pooock_point);
-//               }
-//               $localstorage.setObject('pooock_points', pooock_points);
-//               $log.debug('Line 149: service', $localstorage.getObject('pooock_points'));
-//             })
-//             .error(function(err){
-//               $log.error('remoteServer > new', err);
-//             });
-//         //});
-//       },//new
-//       remove: function(){
-//         $window.geofence.removeAll().then(function () {
-//           $log.debug('All geofences successfully removed.');
-//         }, function (reason) {
-//           $log.error('Removing geofences failed', reason);
-//         });
-//       }//remove
-//     };
-// });
-
 app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $state, $ionicPlatform){
     return {
         check: function(){
@@ -304,7 +195,7 @@ app.factory('remoteServer', function($http, Config, $log){
             $log.info('remoteServer > getData', url);
             var conf = {
                 headers: {
-                    //'Host':'http://pipolup.com',
+                    //'Host':'http://pooock.com',
                     //'Origin':'*'
                 }
             }
@@ -315,7 +206,7 @@ app.factory('remoteServer', function($http, Config, $log){
             $log.debug('remoteServer > postData', values);
             var conf = {
                 headers: {
-                    //'Host':'http://pipolup.com',
+                    //'Host':'http://pooock.com',
                     //'Origin':'*'
                 }
             }
@@ -361,7 +252,7 @@ app.factory('Geofences', function($http, remoteServer, $localstorage) {
                         notification: {
                             id:             data[i].notification_id,
                             title:          data[i].title,
-                            text:           data[i].description,
+                            text:           data[i].text,
                             vibration:      [0], // Sin vibracion!
                             smallIcon:      'res://icon',
                             icon:           'file://img/pooock.png',
