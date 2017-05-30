@@ -1,4 +1,4 @@
-app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, geoService, $ionicPopup, $timeout) {
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, geoService, $ionicPopup, $timeout, $ionicUser) {
 
   $scope.getAll = function(){
     $ionicLoading.show();
@@ -57,7 +57,13 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: '<b>Enviar</b>',
           type: 'button-energized',
           onTap: function(e) {
-            //
+            remoteServer.postData('coupon', $scope.data)
+            .success(function(data) {
+              $log.log('TL > showCoupon > post', data);
+            })
+            .error(function(err){
+              $log.error('TL > showCoupon > post', err);
+            });
           }
         }
       ]
@@ -81,14 +87,28 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: '<i class="ion-thumbsdown"></i>',
           type: 'button-assertive',
           onTap: function() {
-            //
+            var valores = { n: i, d: 1, u: 0, t: $ionicUser.id };
+            remoteServer.postData('votes', valores)
+            .success(function(data) {
+              $log.log('TL > showVotes > post', data);
+            })
+            .error(function(err){
+              $log.error('TL > showVotes > post', err);
+            });
           }
         },
         {
           text: '<i class="ion-thumbsup"></i>',
           type: 'button-balanced',
           onTap: function() {
-            //
+            var valores = { n: i, d: 0, u: 1, t: $ionicUser.id };
+            remoteServer.postData('votes', valores)
+            .success(function(data) {
+              $log.log('TL > showVotes > post', data);
+            })
+            .error(function(err){
+              $log.error('TL > showVotes > post', err);
+            });
           }
         }
       ]
@@ -117,12 +137,14 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: 'Enviar',
           // type: 'button-positive',
           onTap: function(e) {
-            if (!$scope.data.comments) {
-              //don't allow the user to close unless he enters wifi password
-              e.preventDefault();
-            } else {
-              return $scope.data.comments;
-            }
+            var valores = { n: i, c: $scope.data.comments, u: $ionicUser.id };
+            remoteServer.postData('comments', valores)
+            .success(function(data) {
+              $log.log('TL > showComments > post', data);
+            })
+            .error(function(err){
+              $log.error('TL > showComments > post', err);
+            });
           }
         }
       ]

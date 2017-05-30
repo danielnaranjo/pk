@@ -1,10 +1,12 @@
 <ion-view view-title="Ajustes" class="dark">
   <ion-content class="padding">
-        <div class="row">
+
+        <div class="row" ng-show="fotoPerfil">
             <div class="col padding" style="text-align: center;">
                 <img ng-src="{{fotoPerfil}}" class="fotoPerfil" alt="{{usuario}}"><br>
             </div>
         </div>
+        <div ng-hide="fotoPerfil" style="height:100px;"></div>
         
         <p>Categorias disponibles:</p>
         <tags-input class="bootstrap"
