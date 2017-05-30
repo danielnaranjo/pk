@@ -5,6 +5,8 @@ app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout
         $scope.fotoPerfil=$ionicUser.social.twitter.data.profile_picture||$ionicUser.social.facebook.data.profile_picture;
         $scope.full_data=$ionicUser.social.twitter.data.raw_data||$$ionicUser.social.facebook.data.raw_data;
         $log.debug($ionicUser.social);
+
+        $scope.u = $ionicUser.id;
     }
 
     remoteServer.getData('category')

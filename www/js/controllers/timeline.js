@@ -40,75 +40,73 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
   };
 
   // Triggered on a button click, or some other target
-  $scope.showCoupon = function() {
+  $scope.showCoupon = function(i) {
     $scope.data = {};
-    $log.debug('i', this.data);
+    $scope.data.geofence_id = i.geofence_id;
+    $scope.data.notification_id = i.notification_id;
+    $log.debug('showCoupon', i);
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       template: '<input type="text" ng-model="data.coupon">',
       title: 'Tienes un cupón de descuento?',
-      subTitle: 'Obtén más beneficios',
+      subTitle: 'Obtén más beneficios en '+i.label,
       scope: $scope,
       buttons: [
         { text: 'Cancelar' },
         {
           text: '<b>Enviar</b>',
-          type: 'button-positive',
+          type: 'button-energized',
           onTap: function(e) {
-            if (!$scope.data.coupon) {
-              //don't allow the user to close unless he enters wifi password
-              e.preventDefault();
-            } else {
-              return $scope.data.coupon;
-            }
+            //
           }
         }
       ]
     });
     myPopup.then(function(res) {
-      $log.log('Tapped!', res);
+      //$log.log('Tapped!', res);
     });
-
     $timeout(function() {
        myPopup.close(); //close the popup after 3 seconds for some reason
     }, 3000);
    };
 
    // A confirm dialog
-   $scope.showVotes = function() {
-     var confirmPopup = $ionicPopup.confirm({
+   $scope.showVotes = function(i) {
+    $log.debug('showVotes', i);
+    var confirmPopup = $ionicPopup.confirm({
        title: 'Recomiendas este Pooock?',
        template: 'Ayudanos a mejorar',
        buttons: [
-        { text: '<i class="ion-thumbsdown"></i>' },
+        {
+          text: '<i class="ion-thumbsdown"></i>',
+          type: 'button-assertive',
+          onTap: function() {
+            //
+          }
+        },
         {
           text: '<i class="ion-thumbsup"></i>',
-          type: 'button-positive',
-          onTap: function(e) {
-            if (!$scope.data.coupon) {
-              //don't allow the user to close unless he enters wifi password
-              e.preventDefault();
-            } else {
-              return $scope.data.coupon;
-            }
+          type: 'button-balanced',
+          onTap: function() {
+            //
           }
         }
       ]
      });
-
      confirmPopup.then(function(res) {
        if(res) {
           // vote!
-         $log.log('Si, me gustaria recomendarlo');
+         $log.log('showVotes > Si, me gustaria recomendarlo');
        } else {
-         $log.log('No lo recomiendo!');
+         $log.log('showVotes > No lo recomiendo!');
        }
      });
    };
 
    // An alert dialog
-   $scope.showComments = function() {
-     $ionicPopup.show({
+   $scope.showComments = function(i) {
+    $log.debug('showComments', i);
+    $ionicPopup.show({
       template: '<input type="text" ng-model="data.comments">',
       title: 'Envia tus comentarios',
       subTitle: 'Ayudanos a mejorar',
@@ -117,7 +115,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
         { text: 'Cancelar' },
         {
           text: 'Enviar',
-          type: 'button-positive',
+          // type: 'button-positive',
           onTap: function(e) {
             if (!$scope.data.comments) {
               //don't allow the user to close unless he enters wifi password
