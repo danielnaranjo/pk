@@ -9,6 +9,7 @@
         	<marker position="current-location" title="Let's Pooock!" icon="img/pooock.png"></marker>
 
         	<marker
+                ng-show="timeline"
         		ng-repeat="t in timeline"
         		position="{{t.latitude}},{{t.longitude}}"
         		title="{{t.campaign.name}}"

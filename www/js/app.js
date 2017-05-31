@@ -47,7 +47,7 @@ app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ion
     var points = $localstorage.getObject('points');
     // run when is already done!
     if(points && points.length>0 && points!==undefined){
-      $log.debug('Pooock around ', points.length);
+      $log.debug('Geofences: Pooock around ', points.length);
 
       $window.geofence.addOrUpdate(points);
       $window.geofence.onTransitionReceived = function (geofences) {
@@ -69,17 +69,15 @@ app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ion
           }
       }
       $window.geofence.onNotificationClicked = function (notificationData) {
-          //$log.log(notificationData);
-          $log.info('onNotificationClicked',notificationData);
           if (notificationData) {
-              $log.log('onNotificationClicked', notificationData);
+              $log.log('Geofences: onNotificationClicked', notificationData);
           }
       }
       $window.geofence.initialize(function () {
-          $log.log("geofence > Successful initialization");
+          $log.log("Geofences: OK");
       })
     } else {
-      $log.info('Users must be logged to get some Pooock');
+      $log.info('Geofences: Users must be logged to get some Pooock');
     }
     //
   })  

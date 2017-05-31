@@ -13,7 +13,8 @@ app.controller('DashCtrl', function($scope, $rootScope, remoteServer, $ionicPlat
         locationService.getLocation($scope.coords.latitude+','+$scope.coords.longitude)
           .then(function(location){
           var itemLocation =
-          location.results[0].address_components[1].long_name+', ' +
+          location.results[0].address_components[1].long_name+' ' + 
+          location.results[0].address_components[0].long_name+', ' + 
           location.results[0].address_components[2].short_name+', ' +
           location.results[0].address_components[5].short_name;
           $scope.address = itemLocation;

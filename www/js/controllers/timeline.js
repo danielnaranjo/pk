@@ -149,6 +149,17 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
         }
       ]
     });
-   }
+   };
+
+   $scope.showMessage = function(i) {
+     var alertPopup = $ionicPopup.alert({
+       title: 'Pooock: '+i.label,
+       template: i.message
+     });
+
+     alertPopup.then(function(res) {
+       $log.log('TL > showMessage > alertPopup', res);
+     });
+   };
 
 })

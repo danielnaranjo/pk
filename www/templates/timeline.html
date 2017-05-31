@@ -3,7 +3,7 @@
     <ion-refresher pulling-text="Refrescar" on-refresh="doRefresh()"></ion-refresher>
 
     <ul class="timeline">
-      <li ng-repeat="i in timeline" ng-click="showCoupon(i)" on-swipe-left="showVotes(i.notification_id)" on-swipe-right="showComments(i.notification_id)" >
+      <li ng-repeat="i in timeline" on-tap="showMessage(i)" on-hold="showCoupon(i)" on-swipe-left="showVotes(i.notification_id)" on-swipe-right="showComments(i.notification_id)" >
 
         <div
           class="timeline-thumb bg-color-yellow timeline-icon">
