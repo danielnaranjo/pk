@@ -27,6 +27,21 @@
     <script src="cordova.js"></script>
     <script src="lib/uuid.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBHK_ZE1H2JqobzritNEUrsHYEjtWTRtX4",
+        authDomain: "pooock.firebaseapp.com",
+        databaseURL: "https://pooock.firebaseio.com",
+        projectId: "firebase-pooock",
+        storageBucket: "firebase-pooock.appspot.com",
+        messagingSenderId: "682230280860"
+      };
+      firebase.initializeApp(config);
+    </script>
+
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/modules.js"></script><!-- modulo adicional -->

@@ -58,7 +58,8 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Exc
         $scope.withTwitter();
       break;
       default:
-        $log.error('Metodo desconocido, por favor, verifique');
+        $scope.try();
+        //$log.error('Metodo desconocido, por favor, verifique');
     }
 	};// login
 
@@ -70,13 +71,19 @@ $scope.withFacebook = function(){
       $log.debug('fb > object', $ionicUser.social);
     }
     $ionicAuth.login('facebook').then(function(){
-    if ($ionicAuth.isAuthenticated()) {
-      $ionicLoading.hide();
-      $ionicPush.register().then(function(t) {
+      $localstorage.set('pooock_uid', $ionicUser.social.facebook.uid);
+      $localstorage.set('pooock_name', $ionicUser.social.facebook.data.full_name);
+      $localstorage.set('pooock_username', $ionicUser.social.facebook.data.full_name);
+      $localstorage.set('pooock_picture', $ionicUser.social.facebook.data.profile_picture);
+      $localstorage.setObject('pooock_data', $ionicUser.social.facebook.data.raw_data);
+      if ($ionicAuth.isAuthenticated()) {
+        $ionicLoading.hide();
+        $ionicPush.register()
+        .then(function(t) {
           return $ionicPush.saveToken(t);
-      }).then(function(t) {
+        }).then(function(t) {
           //$log.log('Token saved:', t.token);
-      });
+        });
         $state.go('tab.dash');
         $log.info('loginCtrl > withFacebook()');
       }
@@ -87,30 +94,30 @@ $scope.withFacebook = function(){
     });
 };// withFacebook
 
-$scope.withGoogle = function(){
-    $log.log('LoginCtrl > withGoogle()');
-    $ionicLoading.show();
-    if($ionicUser.social.google===true){
-      $log.debug('g+ > object', $ionicUser.social);
-    }
-    $ionicAuth.login('google').then(function(){
-      //$log.debug('$ionicGoogleAuth', $ionicAuth);
-      if ($ionicAuth.isAuthenticated()) {
-        $ionicLoading.hide();
-        $ionicPush.register().then(function(t) {
-            return $ionicPush.saveToken(t);
-        }).then(function(t) {
-            //$log.log('Token saved:', t.token);
-        });
-        $state.go('tab.dash');
-        $log.info('loginCtrl > withGoogle()');
-      }
-    }).catch (function(err){
-      $log.error('loginCtrl > ionicGoogleAuth()', err);
-      $ionicLoading.hide();
-      $scope.onError = "No es posible conectar con Google";
-    });
-}; // withGoogle
+//$scope.withGoogle = function(){
+//     $log.log('LoginCtrl > withGoogle()');
+//     $ionicLoading.show();
+//     if($ionicUser.social.google===true){
+//       $log.debug('g+ > object', $ionicUser.social);
+//     }
+//     $ionicAuth.login('google').then(function(){
+//       //$log.debug('$ionicGoogleAuth', $ionicAuth);
+//       if ($ionicAuth.isAuthenticated()) {
+//         $ionicLoading.hide();
+//         $ionicPush.register().then(function(t) {
+//             return $ionicPush.saveToken(t);
+//         }).then(function(t) {
+//             //$log.log('Token saved:', t.token);
+//         });
+//         $state.go('tab.dash');
+//         $log.info('loginCtrl > withGoogle()');
+//       }
+//     }).catch (function(err){
+//       $log.error('loginCtrl > ionicGoogleAuth()', err);
+//       $ionicLoading.hide();
+//       $scope.onError = "No es posible conectar con Google";
+//     });
+// }; // withGoogle
 
 $scope.withTwitter = function(){
     $log.log('LoginCtrl > withTwitter()');
@@ -119,10 +126,16 @@ $scope.withTwitter = function(){
       $log.debug('twitter > object', $ionicUser.social);
     }
     $ionicAuth.login('twitter').then(function(){
+      $localstorage.set('pooock_uid', $ionicUser.social.twitter.uid);
+      $localstorage.set('pooock_name', $ionicUser.social.twitter.data.username);
+      $localstorage.set('pooock_username', $ionicUser.social.twitter.data.full_name);
+      $localstorage.set('pooock_picture', $ionicUser.social.twitter.data.profile_picture);
+      $localstorage.setObject('pooock_data', $ionicUser.social.twitter.data.raw_data);
       //$log.debug('$ionicGoogleAuth', $ionicAuth, $ionicGoogleAuth);
       if ($ionicAuth.isAuthenticated()) {
         $ionicLoading.hide();
-        $ionicPush.register().then(function(t) {
+        $ionicPush.register()
+        .then(function(t) {
             return $ionicPush.saveToken(t);
         }).then(function(t) {
             //$log.log('Token saved:', t.token);
@@ -135,6 +148,11 @@ $scope.withTwitter = function(){
       $ionicLoading.hide();
       $scope.onError = "No es posible conectar con Twitter";
     });
+}; // withTwitter
+
+$scope.try = function(){
+    $log.log('LoginCtrl > try()');
+    $state.go('tab.dash');
 }; // withTwitter
 
 });

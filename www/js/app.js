@@ -4,7 +4,7 @@ var app = angular.module('starter', [
   'ngCordova',
   'angularMoment',
   'ngMap',
-  //'firebase',
+  'firebase',
   'greatCircles',
   'ngTagsInput',
 ]);
@@ -14,7 +14,7 @@ app.constant("Config", {
   "Server": "https://pooock.com/admin/index.php/api/data", // https://pooock.stamplayapp.com/api/cobject/v1
 })
 
-app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ionicPopup, $window, $log, $ionicLoading, geoService, $state, $ionicAuth, $localstorage, Geofences, isUserLogged, updateApp) {
+app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ionicPopup, $window, $log, $ionicLoading, $ionicPopup, geoService, $state, $ionicAuth, $localstorage, Geofences, isUserLogged, updateApp) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -27,19 +27,18 @@ app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ion
     }
   });
 
+  // si esta autenticado, ir a tareas
+  if ($ionicAuth.isAuthenticated()) {
+    isUserLogged.check();
+    $state.go('tab.dash');
+  }
+
   $ionicPlatform.ready(function() {
     // Get user location
     geoService.getPosition();
-    isUserLogged.check();
-    updateApp.checkForUpdates();
-    $localstorage.set('compile_version',moment().unix());
-    $log.debug('compile_version', $localstorage.get('compile_version') );
-
-    // si esta autenticado, ir a tareas
-    if ($ionicAuth.isAuthenticated()) {
-      $state.go('tab.dash');
-      //$log.debug('$ionicAuth.isAuthenticated()', $ionicAuth.isAuthenticated());
-    }
+    //updateApp.checkForUpdates();
+    //$localstorage.set('compile_version',moment().unix());
+    //$log.debug('compile_version', $localstorage.get('compile_version') );
   });
 
   $ionicPlatform.ready(function(){
@@ -51,33 +50,66 @@ app.run(function($ionicPlatform, $rootScope, $http, $timeout, remoteServer, $ion
 
       $window.geofence.addOrUpdate(points);
       $window.geofence.onTransitionReceived = function (geofences) {
-          $log.log(geofences);
+          //$log.debug('onTransitionReceived', geofences);
+          //$localstorage.set('onTransitionReceived_'+moment().unix(), angular.toJson(geofences) );
+
+          // Add metrics to Firebase
+          var res = geofences[0].notification.data;
+          remoteServer.pushFirebase(res.g, res.n, res.u, 'received');
+
           if (geofences) {
-              $rootScope.$apply(function () {
-                  geofences.forEach(function (geo) {
-                      geo.notification = geo.notification || {
-                          title: "Geofence transition",
-                          text: "Without notification"
-                      };
-                      $ionicLoading.show({
-                          template: geo.notification.title + ": " + geo.notification.text,
-                          noBackdrop: true,
-                          duration: 2000
-                      });
-                  });
+            $rootScope.$apply(function () {
+              geofences.forEach(function (geo) {
+                geo.notification = geo.notification || {
+                  title: "Geofence transition",
+                  text: "Without notification"
+                };
+                // $ionicLoading.show({
+                //   //title: geo.notification.title,
+                //   template: geo.notification.text,
+                //   noBackdrop: true,
+                //   duration: 5000
+                // });
+                //$log.debug('geofences (geo)', geofences);
+                var alertPopup = $ionicPopup.show({
+                    title: geo.notification.title,
+                    subTitle: 'Beneficios exclusivos de Pooock',
+                    template: geo.notification.text,
+                    buttons: [ { text: 'OK!' }]
+                });
+                alertPopup.then(function(res) {
+                  $log.log('App > alertPopup', res);
+                });
+                //
               });
+            });
           }
       }
-      $window.geofence.onNotificationClicked = function (notificationData) {
-          if (notificationData) {
-              $log.log('Geofences: onNotificationClicked', notificationData);
-          }
-      }
+      
       $window.geofence.initialize(function () {
-          $log.log("Geofences: OK");
+        $log.log("Geofences: OK");
       })
     } else {
       $log.info('Geofences: Users must be logged to get some Pooock');
+    }
+    //
+    $window.geofence.onNotificationClicked = function (notificationData) {
+      //$log.debug('Geofences: onNotificationClicked', notificationData);
+      //$localstorage.set('onNotificationClicked_'+moment().unix(), angular.toJson(notificationData) );
+
+      // Add metrics to Firebase
+      remoteServer.pushFirebase(notificationData.g, notificationData.n, notificationData.u, 'notifications');
+
+      if (notificationData) {
+        //$log.debug('Geofences: onNotificationClicked (if)', notificationData);
+        //$localstorage.set('notificationData_'+moment().unix(), angular.toJson(notificationData) );
+        
+        // Add metrics to Firebase
+        remoteServer.pushFirebase(notificationData.g, notificationData.n, notificationData.u, 'clicked');
+        
+        // Deberia abrir el popup
+        $state.go('app.timeline');
+      }
     }
     //
   })  

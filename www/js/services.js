@@ -189,7 +189,7 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
   }
 });
 
-app.factory('remoteServer', function($http, Config, $log){
+app.factory('remoteServer', function($http, Config, $log, $firebaseArray){
     return {
         getData: function(url){
             $log.info('remoteServer > getData', url);
@@ -211,11 +211,22 @@ app.factory('remoteServer', function($http, Config, $log){
                 }
             }
             return $http.post(Config.Server+'/'+url, values, conf);
+        },
+        pushFirebase: function(g,n,u,m){
+            $log.debug('remoteServer > pushFirebase', g, n, u, m);
+            var ref = firebase.database().ref().child(m);
+            var saving = $firebaseArray(ref);
+            saving.$add({
+              geofence: g,
+              notification: n,
+              user: u,
+              timestamp: moment().unix()
+            });
         }
     }
 });
 
-app.factory('Geofences', function($http, remoteServer, $localstorage) {
+app.factory('Geofences', function($http, remoteServer, $localstorage, $ionicUser) {
     /*
     {
         id:             String, //A unique identifier of geofence
@@ -255,8 +266,13 @@ app.factory('Geofences', function($http, remoteServer, $localstorage) {
                             text:           data[i].text,
                             vibration:      [0], // Sin vibracion!
                             smallIcon:      'res://icon',
-                            icon:           'file://img/pooock.png',
-                            openAppOnClick: data[i].openAppOnClick
+                            icon:           'file://img/icono.png',
+                            openAppOnClick: data[i].openAppOnClick,
+                            data : {
+                              g: data[i].id,
+                              n: data[i].notification_id,
+                              u: $ionicUser.id
+                            }
                         }
                     }
                     points.push(point);

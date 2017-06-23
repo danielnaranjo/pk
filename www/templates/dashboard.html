@@ -1,5 +1,5 @@
-<ion-view view-title="Let's Pooock!" class="dark">
-  <ion-content class="padding">
+<ion-view view-title="Let's Pooock!" class="dark" ng-init="getInfo()">
+  <ion-content class="padding" on-tap="getInfo()">
 
     <div class="rotate">
       
@@ -7,12 +7,22 @@
         <img src="img/logo.png" alt="logo" style="width:90%">
       </p>
       
-      <p style="text-align:center;">
+      <p style="text-align:center;width:90%;">
         <ul style="text-align:center;">
-          <li ng-show="geolocalization"><span ng-show="geolocalization" ng-hide="address">{{geolocalization}}</span> <span ng-show="address">{{address}}</span></li>
-          <!-- <li ng-controller="AppCtrl" ng-click="checkupdate()" ng-show="version">v{{version}}</li> -->
+          <li ng-show="geolocalization">
+
+            <span ng-show="geolocalization" ng-hide="address">{{geolocalization}}</span>
+            <span ng-show="address">
+              <span ng-controller="TimelineCtrl" ng-init="ubicar()" ng-show="timeline">
+                Hay {{timeline.length}} pooock cerca de 
+              </span>
+              {{address}}
+              </span>
+          </li >
+          
         </ul>
       </p>
+
       
     </div>
 

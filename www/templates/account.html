@@ -3,24 +3,25 @@
 
         <div class="row" ng-show="fotoPerfil">
             <div class="col padding" style="text-align: center;">
-                <img ng-src="{{fotoPerfil}}" class="fotoPerfil" alt="{{usuario}}"><br>
+                <img src="{{fotoPerfil}}" class="fotoPerfil" alt="{{usuario}}"><br>
             </div>
         </div>
         <div ng-hide="fotoPerfil" style="height:100px;"></div>
-        
+
         <p>Categorias disponibles:</p>
         <tags-input class="bootstrap"
             ng-model="categorias"
             placeholder="Agrega o elimina categorias"
             replace-spaces-with-dashes="false">
-        <auto-complete 
-            source="loadMovies($query)"
-            min-length="0"
-            debounce-delay="0"
-            max-results="10">     
-        </auto-complete>
-    </tags-input>
-    
+            <auto-complete 
+                source="loadMovies($query)"
+                min-length="0"
+                debounce-delay="0"
+                max-results="10">     
+            </auto-complete>
+        </tags-input>
+        <!-- Temporal -->
+        <div style="position: absolute;z-index:1000;background-color:transparent;height:100px;width:100%;left:0;top:150px;"></div>
     <p>
         Quieres llegar a más personas a través de una experiencia personalizada?
         <a href="mailto:info@pooock.com?subject={{u}}" style="color:white">Contáctanos</a>

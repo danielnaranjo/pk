@@ -7,7 +7,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
     .success(function(data) {
       $ionicLoading.hide();
       $scope.timeline = data.results;
-      //$log.log('data @timeline', data.results.length);
+      $log.log('data @timeline', data.results.length);
     })
     .error(function(err){
       $log.error(err);
@@ -152,13 +152,14 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
    };
 
    $scope.showMessage = function(i) {
-     var alertPopup = $ionicPopup.alert({
+     var alertPopup = $ionicPopup.show({
        title: 'Pooock: '+i.label,
-       template: i.message
+       //subTitle: 'Obtén más beneficios en '+i.label,
+       template: i.message,
+       buttons: [ { text: 'OK' }]
      });
-
-     alertPopup.then(function(res) {
-       $log.log('TL > showMessage > alertPopup', res);
+     alertPopup.then(function() {
+       $log.log('TL > showMessage > alertPopup');
      });
    };
 
