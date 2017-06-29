@@ -5,6 +5,7 @@
     "dependencies": {
         "@ionic/cloud": "^0.9.0",
         "bluebird": "^3.5.0",
+        "cordova-plugin-facebook4": "^1.9.1",
         "gulp": "^3.5.6",
         "gulp-concat": "^2.2.0",
         "gulp-minify-css": "^0.3.0",
@@ -31,7 +32,11 @@
             "cordova-plugin-geolocation": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-splashscreen": {},
-            "ionic-plugin-deploy": {}
+            "ionic-plugin-deploy": {},
+            "cordova-plugin-facebook4": {
+                "APP_ID": "123456789",
+                "APP_NAME": "myApplication"
+            }
         }
     }
 }
