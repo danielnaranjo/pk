@@ -71,6 +71,7 @@ $scope.withFacebook = function(){
       $log.debug('fb > object', $ionicUser.social);
     }
     $ionicAuth.login('facebook').then(function(){
+    //$ionicFacebookAuth.login().then(function(){ //<-- Need to be fixed to work with Facebook Native
       $localstorage.set('pooock_uid', $ionicUser.social.facebook.uid);
       $localstorage.set('pooock_name', $ionicUser.social.facebook.data.full_name);
       $localstorage.set('pooock_username', $ionicUser.social.facebook.data.full_name);
