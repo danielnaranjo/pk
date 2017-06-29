@@ -56,27 +56,18 @@ app.factory('$localstorage', function($window, $log) {
     };
 });
 
-app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $state, $ionicPlatform){
+app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $state, $ionicPlatform, $localstorage){
     return {
         check: function(){
             //$log.debug('isUserLogged', $ionicUser);
             if ($ionicAuth.isAuthenticated()) {
                 // Monitoreo y aplico!
                 $log.log('isAuthenticated', $ionicAuth.isAuthenticated() );
-                // social login
-                if($ionicUser.details.facebook_id){
-                    $rootScope.nombrePerfil = $ionicUser.social.facebook.data.full_name;
-                    $rootScope.fotoPerfil = $ionicUser.social.facebook.data.profile_picture;
-                    $rootScope.emailPerfil = $ionicUser.social.facebook.data.email;
-                    //$log.info('isUserLogged > check > facebook:',  $rootScope.nombrePerfil, $ionicUser.social.facebook);
-                } else { // email
-                    $rootScope.nombrePerfil = $ionicUser.details.name;
-                    $rootScope.fotoPerfil = $ionicUser.details.image||'img/avatar.png';
-                    //$log.info('isUserLogged > check > details:', $rootScope.nombrePerfil, $ionicUser.details );
-                }
-                //$rootScope.nombrePerfil = $ionicUser.details.name||$ionicUser.social.facebook.data.full_name;
-                //$rootScope.fotoPerfil = $ionicUser.details.image||$ionicUser.social.facebook.data.profile_picture;
-                //$rootScope.emailPerfil = $ionicUser.details.image||$ionicUser.social.facebook.data.email;
+                $rootScope.usuario = $localstorage.get('pooock_name');
+                $rootScope.fotoPerfil = $localstorage.get('pooock_picture');
+                $rootScope.uid = $localstorage.get('pooock_uid');
+                $rootScope.full_data = $localstorage.getObject('pooock_data');
+                $rootScope.u = $ionicUser.id;
             }
         }
     };
@@ -189,14 +180,13 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
   }
 });
 
-app.factory('remoteServer', function($http, Config, $log, $firebaseArray){
+app.factory('remoteServer', function($http, Config, $log, $firebaseArray, $ionicUser){
     return {
         getData: function(url){
             $log.info('remoteServer > getData', url);
             var conf = {
                 headers: {
-                    //'Host':'http://pooock.com',
-                    //'Origin':'*'
+                  'X-Requested-By' : $ionicUser.id
                 }
             }
             return $http.get(Config.Server+'/'+url, conf);
@@ -206,8 +196,9 @@ app.factory('remoteServer', function($http, Config, $log, $firebaseArray){
             $log.debug('remoteServer > postData', values);
             var conf = {
                 headers: {
-                    //'Host':'http://pooock.com',
-                    //'Origin':'*'
+                  'X-Requested-By' : $ionicUser.id
+                  //'Host':'http://pooock.com',
+                  //'Origin':'*'
                 }
             }
             return $http.post(Config.Server+'/'+url, values, conf);
