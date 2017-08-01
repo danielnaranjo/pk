@@ -1,4 +1,4 @@
-app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange, $ionicUser, $ionicAuth, $ionicPopup, $state, $ionicSlideBoxDelegate, $ionicLoading, $log, $localstorage) {
+app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange, $ionicUser, $ionicPopup, $state, $ionicSlideBoxDelegate, $ionicLoading, $log, $localstorage) {
 
     $scope.slides = [
         {name:"Registrate", text:"Usa tu facebook o Twitter, jamas publicaremos en tu nombre!",  image:"img/PantallasSlider-02.png", button: true },
@@ -36,9 +36,9 @@ app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange,
         showPager: false
     };
     $scope.main = function(){
-        if ($ionicAuth.isAuthenticated()) {
-            $state.go('tab.dash');
-        }
+        // if ($ionicAuth.isAuthenticated()) {
+        //     $state.go('tab.dash');
+        // }
     };
     $scope.gotologin = function(){
         $state.go('login');

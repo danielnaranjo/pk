@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, $localstorage, Geofences) {
+app.controller('LoginCtrl', function ($scope, $http, $ionicUser, Exchange, $state, Config, $ionicLoading, $ionicHistory, $log, $ionicPlatform, $ionicPopup, $ionicModal, $ionicPush, $localstorage, Geofences) {
     $scope.detener = function(){
         // Previene el boton de Volver
         $ionicHistory.nextViewOptions({
@@ -6,50 +6,10 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Exc
         });
     };
 
-    // $http.get('https://pooock.com/admin/index.php/api/data/points')
-    //   .success(function(response) {
-    //     $log.debug('How many Pooock are available?', response.length);
-    //     var points = [];
-    //     for(var i=0; i<response.length; i++){
-    //       //$log.debug(angular.toJson(response[i]));
-    //       var point = {
-    //         id:             UUIDjs.create().toString(),//response[i].geofence_id,
-    //         latitude:       response[i].latitude,
-    //         longitude:      response[i].longitude,
-    //         radius:         response[i].radius||100,
-    //         transitionType: response[i].transitionType||1,
-    //         notification: {
-    //           id:             response[i].notification_id,
-    //           title:          'Pooock!',// si paga mas, tiene mensaje personalizado!
-    //           text:           response[i].message||'Tenemos un algo para ti!',
-    //           vibration:      [response[i].vibration||0], // si paga mas, tiene vibracion personalizado!
-    //           smallIcon:      'response://icon', // transparente
-    //           icon:           'file://img/pooock.png',
-    //           openAppOnClick: response[i].openAppOnClick||true,
-    //           data: {
-    //             geofence_id: response[i].geofence_id,
-    //             notification_id: response[i].notification_id,
-    //             behavior_id: response[i].behavior_id
-    //           }
-    //         }
-    //       };
-    //       //$log.debug(response[i].geofence_id, angular.toJson(point) );
-    //       points.push(point);
-
-    //     }
-    //     //$localstorage.setObject('points');
-    //     $log.info('res', angular.toJson(points));
-    //   })
-    //   .error(function(err){
-    //     $log.error('remoteServer > new', err);
-    //   });
-
-  // Geofences.getting();
-
   $scope.login = function(provider){
     switch (provider) {
       case provider='facebook':
-        $scope.withFacebook();
+        $scope.facebookSignIn();
       break;
       case provider='google':
         $scope.withGoogle();
@@ -63,92 +23,55 @@ app.controller('LoginCtrl', function ($scope, $ionicAuth, $http, $ionicUser, Exc
     }
 	};// login
 
-$scope.withFacebook = function(){
-    $scope.detener();
-    $log.log('LoginCtrl > withFacebook()');
+$scope.withGoogle = function(){
+    $log.log('LoginCtrl > withGoogle()');
     $ionicLoading.show();
-    if($ionicUser.social.facebook===true){
-      $log.debug('fb > object', $ionicUser.social);
-    }
-    $ionicAuth.login('facebook').then(function(){
-    //$ionicFacebookAuth.login().then(function(){ //<-- Need to be fixed to work with Facebook Native
-      $localstorage.set('pooock_uid', $ionicUser.social.facebook.uid);
-      $localstorage.set('pooock_name', $ionicUser.social.facebook.data.full_name);
-      $localstorage.set('pooock_username', $ionicUser.social.facebook.data.full_name);
-      $localstorage.set('pooock_picture', $ionicUser.social.facebook.data.profile_picture);
-      $localstorage.setObject('pooock_data', $ionicUser.social.facebook.data.raw_data);
-      if ($ionicAuth.isAuthenticated()) {
+    window.plugins.googleplus.login({},function (user_data) {
+        $log.info('LoginCtrl > withGoogle()', user_data);
+        $localstorage.set('pooock_uid', $ionicUser.social.twitter.uid);
+        $localstorage.set('pooock_name', $ionicUser.social.twitter.data.username);
+        $localstorage.set('pooock_username', $ionicUser.social.twitter.data.full_name);
+        $localstorage.set('pooock_picture', $ionicUser.social.twitter.data.profile_picture);
+        $localstorage.setObject('pooock_data', $ionicUser.social.twitter.data.raw_data);
         $ionicLoading.hide();
-        $ionicPush.register()
-        .then(function(t) {
-          return $ionicPush.saveToken(t);
-        }).then(function(t) {
-          //$log.log('Token saved:', t.token);
-        });
         $state.go('tab.dash');
-        $log.info('loginCtrl > withFacebook()');
-      }
-    }).catch (function(err){
-      $log.error('loginCtrl > ionicFacebookAuth()', err);
-      $ionicLoading.hide();
-      $scope.onError = "Error: No es posible conectar con Facebook";
+    },
+    function (err) {
+        $scope.errorMessage='Ha ocurrido un problema, intenta nuevamente. Code E0'+err;
+        $log.error('LoginCtrl > withGoogle()', err);
+        $ionicLoading.hide();
     });
-};// withFacebook
-
-//$scope.withGoogle = function(){
-//     $log.log('LoginCtrl > withGoogle()');
-//     $ionicLoading.show();
-//     if($ionicUser.social.google===true){
-//       $log.debug('g+ > object', $ionicUser.social);
-//     }
-//     $ionicAuth.login('google').then(function(){
-//       //$log.debug('$ionicGoogleAuth', $ionicAuth);
-//       if ($ionicAuth.isAuthenticated()) {
-//         $ionicLoading.hide();
-//         $ionicPush.register().then(function(t) {
-//             return $ionicPush.saveToken(t);
-//         }).then(function(t) {
-//             //$log.log('Token saved:', t.token);
-//         });
-//         $state.go('tab.dash');
-//         $log.info('loginCtrl > withGoogle()');
-//       }
-//     }).catch (function(err){
-//       $log.error('loginCtrl > ionicGoogleAuth()', err);
-//       $ionicLoading.hide();
-//       $scope.onError = "No es posible conectar con Google";
-//     });
-// }; // withGoogle
+}; // withGoogle
 
 $scope.withTwitter = function(){
-    $log.log('LoginCtrl > withTwitter()');
-    $ionicLoading.show();
-    if($ionicUser.social.twitter===true){
-      $log.debug('twitter > object', $ionicUser.social);
-    }
-    $ionicAuth.login('twitter').then(function(){
-      $localstorage.set('pooock_uid', $ionicUser.social.twitter.uid);
-      $localstorage.set('pooock_name', $ionicUser.social.twitter.data.username);
-      $localstorage.set('pooock_username', $ionicUser.social.twitter.data.full_name);
-      $localstorage.set('pooock_picture', $ionicUser.social.twitter.data.profile_picture);
-      $localstorage.setObject('pooock_data', $ionicUser.social.twitter.data.raw_data);
-      //$log.debug('$ionicGoogleAuth', $ionicAuth, $ionicGoogleAuth);
-      if ($ionicAuth.isAuthenticated()) {
-        $ionicLoading.hide();
-        $ionicPush.register()
-        .then(function(t) {
-            return $ionicPush.saveToken(t);
-        }).then(function(t) {
-            //$log.log('Token saved:', t.token);
-        });
-        $state.go('tab.dash');
-        $log.info('loginCtrl > withTwitter()');
-      }
-    }).catch (function(err){
-      $log.error('loginCtrl > withTwitter()', err);
-      $ionicLoading.hide();
-      $scope.onError = "No es posible conectar con Twitter";
-    });
+    // $log.log('LoginCtrl > withTwitter()');
+    // $ionicLoading.show();
+    // if($ionicUser.social.twitter===true){
+    //   $log.debug('twitter > object', $ionicUser.social);
+    // }
+    // $ionicAuth.login('twitter').then(function(){
+    //   $localstorage.set('pooock_uid', $ionicUser.social.twitter.uid);
+    //   $localstorage.set('pooock_name', $ionicUser.social.twitter.data.username);
+    //   $localstorage.set('pooock_username', $ionicUser.social.twitter.data.full_name);
+    //   $localstorage.set('pooock_picture', $ionicUser.social.twitter.data.profile_picture);
+    //   $localstorage.setObject('pooock_data', $ionicUser.social.twitter.data.raw_data);
+    //   //$log.debug('$ionicGoogleAuth', $ionicAuth, $ionicGoogleAuth);
+    //   if ($ionicAuth.isAuthenticated()) {
+    //     $ionicLoading.hide();
+    //     $ionicPush.register()
+    //     .then(function(t) {
+    //         return $ionicPush.saveToken(t);
+    //     }).then(function(t) {
+    //         //$log.log('Token saved:', t.token);
+    //     });
+    //     $state.go('tab.dash');
+    //     $log.info('loginCtrl > withTwitter()');
+    //   }
+    // }).catch (function(err){
+    //   $log.error('loginCtrl > withTwitter()', err);
+    //   $ionicLoading.hide();
+    //   $scope.onError = "No es posible conectar con Twitter";
+    // });
 }; // withTwitter
 
 $scope.try = function(){
@@ -156,4 +79,102 @@ $scope.try = function(){
     $state.go('tab.dash');
 }; // withTwitter
 
+// Facebook Native SDK
+    var fbLoginSuccess = function(response) {
+        if (!response.authResponse){
+            fbLoginError("Cannot find the authResponse");
+            $state.go('login');
+            $log.error('fbLoginSuccess > Cannot find the authResponse');
+            return;
+        }
+        $log.info('269 pipol > authResponse', response);
+        var authResponse = response.authResponse;
+        getFacebookProfileInfo(authResponse)
+        .then(function(profileInfo) {
+
+            $localstorage.set('pooock_uid', profileInfo.id);
+            $localstorage.set('pooock_name', profileInfo.name);
+            $localstorage.set('pooock_username', profileInfo.email);
+            $localstorage.set('pooock_picture', "http://graph.facebook.com/" + profileInfo.id + "/picture?type=large";
+            $localstorage.setObject('pooock_data', authResponse.authResponse);
+            $ionicLoading.hide();
+            //
+            // var user = $localstorage.getObject('pipolup_info');
+            // var details = {
+            //     userID: user.userID,
+            //     name: user.name,
+            //     email: user.email,
+            //     picture: user.picture
+            // }
+            // registeredwithsocial(details);
+            //
+            $state.go('app.dash');
+        }, function(fail){
+            $scope.errorMessage='Ha ocurrido un problema, intenta nuevamente. Code E002';
+            $log.error('fbLoginSuccess > profile info fail', fail);
+        });
+
+    };//fbLoginSuccess
+    var fbLoginError = function(error){
+        $log.error('fbLoginError', error);
+        $ionicLoading.hide();
+    };//fbLoginError
+
+    // This method is to get the user profile info from the facebook api
+    var getFacebookProfileInfo = function (authResponse) {
+        var info = $q.defer();
+        facebookConnectPlugin.api('/me?fields=email,name&access_token=' + authResponse.accessToken, null,
+            function (response) {
+                info.resolve(response);
+            },
+            function (response) {
+                $log.log(response);
+                info.reject(response);
+            }
+        );
+        return info.promise;
+      };//getFacebookProfileInfo
+
+      $scope.facebookSignIn = function() {
+        facebookConnectPlugin.getLoginStatus(function(success){
+            //$log.info('302 pipolup > facebookSignIn > getLoginStatus', angular.toJson(success));
+            if(success.status === 'connected'){
+              $log.log('facebookSignIn > getLoginStatus > connected');
+              // Check if we have our user saved
+              var user = $localstorage.getObject('pipolup_info');
+              if(!user.userID){
+              getFacebookProfileInfo(success.authResponse).then(function(profileInfo) {
+              $localstorage.set('pooock_uid', profileInfo.id);
+              $localstorage.set('pooock_name', profileInfo.name);
+              $localstorage.set('pooock_username', profileInfo.email);
+              $localstorage.set('pooock_picture', "http://graph.facebook.com/" + profileInfo.id + "/picture?type=large";
+              $localstorage.setObject('pooock_data', authResponse.authResponse);
+              $log.info('facebookSignIn > getFacebookProfileInfo > profileInfo',angular.toJson(profileInfo));
+              //
+              // var user = $localstorage.getObject('pipolup_info');
+              // var details = {
+              //     userID: user.userID,
+              //     name: user.name,
+              //     email: user.email,
+              //     picture: user.picture
+              // }
+              // registeredwithsocial(details);
+              //
+              $state.go('app.dash');
+            }, function(fail){
+              $log.error('facebookSignIn > getFacebookProfileInfo > profile info fail', fail);
+            });
+          } else {
+            $state.go('app.tareas');
+          }
+           } else {
+               $ionicLoading.show();
+                if (success.status === 'not_authorized' || success.status === 'unknown') { //the user is logged in to Facebook,
+                  facebookConnectPlugin.login(['email', 'public_profile'], fbLoginSuccess, fbLoginError);
+                }
+            }
+        });
+    };//facebookSignIn
+    //
+  }
 });

@@ -1,16 +1,28 @@
-app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, isUserLogged, $ionicAuth, $ionicUser, updateApp, $localstorage, $state) {
+app.controller('AppCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPush, isUserLogged, $ionicUser, updateApp, $localstorage, $state) {
 
     isUserLogged.check();
 
     $scope.salir = function(){
+
+        facebookConnectPlugin.logout(function(){
+            $log.log('AppCtrl > Salir() > facebookConnectPlugin');
+        },function(fail){
+            $log.error('facebookConnectPlugin > logout');
+        });
+
+        window.plugins.googleplus.logout(function (msg) {
+            $log.log('AppCtrl > Salir() > googleplus > logout', msg);
+        },function(fail){
+            $log.log(fail);
+        });
+
         $localstorage.set('pooock_uid', '');
         $localstorage.set('pooock_name', '');
         $localstorage.set('pooock_username', '');
         $localstorage.set('pooock_picture', '');
         $localstorage.setObject('pooock_data', '');
-        $ionicAuth.logout();
         $ionicPush.unregister();
-        $log.log('AppCtrl > Salir() > ionicAuth', $ionicUser);
+        $log.log('AppCtrl > Salir()', $ionicUser);
         $state.go('login');
     };//salid
 
