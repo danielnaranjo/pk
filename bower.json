@@ -7,6 +7,7 @@
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
     "angular-moment": "^0.10.3",
-    "ng-tags-input": "3.1.1"
+    "ng-tags-input": "3.1.1",
+    "ng-rollbar": "^2.2.4"
   }
 }

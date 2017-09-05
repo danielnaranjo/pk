@@ -4,11 +4,19 @@ app.factory('Exchange', function (){
   };
 });
 
-app.factory('locationService', function ($http, $log) {
-   var locations = [];
-   var latlng = "";
-   return {
-     getLocation: function(latlng){
+
+app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation, $log, $http) {
+  var positionOptions = {timeout: 10000, enableHighAccuracy: true};
+  var locations = [];
+  var latlng = "";
+  return {
+    getPosition: function() {
+      return $ionicPlatform.ready()
+      .then(function() {
+        return $cordovaGeolocation.getCurrentPosition(positionOptions);
+      })
+    },
+    getLocation: function(latlng){
      return $http({
         url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true",
         method: "GET",
@@ -18,20 +26,8 @@ app.factory('locationService', function ($http, $log) {
         return locations;
       }, function(error){
         $log.error('Error: Cant connect with Google Maps API');
+        //Rollbar.warning("services > geoService > getLocation > Cant connect with Google Maps API");
       });
-    }
-  };
-});
-
-
-app.factory('geoService', function ($ionicPlatform, $cordovaGeolocation, $log) {
-  var positionOptions = {timeout: 10000, enableHighAccuracy: true};
-  return {
-    getPosition: function() {
-      return $ionicPlatform.ready()
-      .then(function() {
-        return $cordovaGeolocation.getCurrentPosition(positionOptions);
-      })
     }
   };
 });
@@ -56,7 +52,7 @@ app.factory('$localstorage', function($window, $log) {
     };
 });
 
-app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $state, $ionicPlatform, $localstorage){
+app.factory('isUserLogged', function($rootScope, $log, $state, $ionicPlatform, $localstorage){
     return {
         check: function(){
             //$log.debug('isUserLogged', $ionicUser);
@@ -67,90 +63,11 @@ app.factory('isUserLogged', function($rootScope, $ionicAuth, $ionicUser, $log, $
                 $rootScope.fotoPerfil = $localstorage.get('pooock_picture');
                 $rootScope.uid = $localstorage.get('pooock_uid');
                 $rootScope.full_data = $localstorage.getObject('pooock_data');
-                $rootScope.u = $ionicUser.id;
+                //$rootScope.u = $ionicUser.id;
             }
         }
     };
 });
-
-app.factory('updateApp', function($rootScope, $ionicDeploy, $ionicPopup, $ionicLoading, $log){
-  return {
-    checkForUpdates: function(){
-      $log.info('Ionic Deploy: Checking for updates');
-      $ionicDeploy.channel = 'production'; //dev
-      $ionicDeploy.check().then(function(hasUpdate) {
-          if(hasUpdate===false){
-              //$scope.version=$rootScope.version;
-          } else {
-              //http://www.theodo.fr/blog/2016/03/its-alive-get-your-ionic-app-to-update-automatically-part-2/
-              $ionicPopup.show({
-                  title: 'Actualización disponible',
-                  subTitle: 'Nuevas caracteristicas y funciones extras, quieres descargarla y probarla?',
-                  buttons: [
-                  { text: 'Cancelar' },
-                  { text: 'Descargar Ahora',
-                      onTap: function(e) {
-                        $ionicLoading.show({
-                            template: 'Descargando, por favor, espere..',
-                            duration: 5000
-                        });
-                        $log.debug('Actualizando version..');
-                        $ionicDeploy.download().then(function(d) {
-                            $ionicLoading.show({
-                                template: 'Actualizando, por favor, espere..',
-                                duration: 5000
-                            });
-                            //$log.info('Progress... ');
-                            return $ionicDeploy.extract();
-                        }).then(function(d) {
-                            $ionicLoading.show({
-                                template: 'Versión actualizada! Reiniciando..',
-                                duration: 5000
-                            });
-                            $log.info('Update Success!');
-                            return $ionicDeploy.load();
-                        });
-                      }
-                  }],
-              });
-          }
-          $log.debug('Ionic Deploy: Update available is ' + hasUpdate);
-      }, function(err) {
-          $log.error('Ionic Deploy: Unable to check for updates', err);
-      });
-    }
-  }
-});
-
-// app.factory('appVersion', function($rootScope, $cordovaAppVersion, $log, $localstorage, $ionicPlatform){
-//   return {
-//     check: function(){
-//       //console.debug('$cordovaAppVersion', angular.toJson($cordovaAppVersion)) ;
-//       return $ionicPlatform.ready( function(){
-//           $rootScope.device = ionic.Platform.device();
-//           $rootScope.isWebView = ionic.Platform.isWebView();
-//           $cordovaAppVersion.getVersionNumber().then(function (version){ // <-- No disponible en Local
-//             $rootScope.version = version;
-//             $log.info('device@info', $rootScope.version, $rootScope.device.platform);
-//         }, function(error){
-//             $log.error('getVersionNumber failed', angular.toJson(error));
-//         });
-//         var userDevice = {
-//           os: $rootScope.device.platform,
-//           version: $rootScope.device.version,
-//           webView: $rootScope.isWebView,
-//           app_version: $rootScope.version,
-//           cordova_version: $rootScope.device.cordova
-//         }
-//         $localstorage.setObject('userDevice', userDevice );
-//         $log.debug('userDevice', angular.toJson(userDevice));
-//       })
-//     },
-//     getPlatform: function() {
-//       return $localstorage.getObject('userDevice');
-//     }
-//   }
-// });
 
 app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaInAppBrowser, $ionicPlatform, ConnectivityMonitor, remoteServer){
   return {
@@ -167,6 +84,7 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
           })
           .catch(function(event) {
               $log.error('cordovaInAppBrowser',event);
+              //Rollbar.debug("services > openBrowser");
           });
       });
     },
@@ -180,14 +98,15 @@ app.factory('Utils', function($http, $localstorage, $rootScope, $log, $cordovaIn
   }
 });
 
-app.factory('remoteServer', function($http, Config, $log, $firebaseArray, $ionicUser){
+app.factory('remoteServer', function($http, Config, $log, $firebaseArray){
     return {
         getData: function(url){
             $log.info('remoteServer > getData', url);
             var conf = {
                 headers: {
-                  'X-Requested-By' : $ionicUser.id
-                }
+                  'X-Requested-By' : moment().unix()
+                },
+                cache: true
             }
             return $http.get(Config.Server+'/'+url, conf);
         },
@@ -196,7 +115,7 @@ app.factory('remoteServer', function($http, Config, $log, $firebaseArray, $ionic
             $log.debug('remoteServer > postData', values);
             var conf = {
                 headers: {
-                  'X-Requested-By' : $ionicUser.id
+                  'X-Requested-By' : moment().unix()
                   //'Host':'http://pooock.com',
                   //'Origin':'*'
                 }
@@ -213,34 +132,22 @@ app.factory('remoteServer', function($http, Config, $log, $firebaseArray, $ionic
               user: u,
               timestamp: moment().unix()
             });
-        }
+        },
+        getStatic: function(url){
+            $log.info('remoteServer > getData', url);
+            var conf = {
+                cache: true
+            }
+            return $http.get(Config.API+'/'+url, conf);
+        },
     }
 });
 
-app.factory('Geofences', function($http, remoteServer, $localstorage, $ionicUser) {
-    /*
-    {
-        id:             String, //A unique identifier of geofence
-        latitude:       Number, //Geo latitude of geofence
-        longitude:      Number, //Geo longitude of geofence
-        radius:         Number, //Radius of geofence in meters
-        transitionType: Number, //Type of transition 1 - Enter, 2 - Exit, 3 - Both
-        notification: {         //Notification object
-            id:             Number, //optional should be integer, id of notification
-            title:          String, //Title of notification
-            text:           String, //Text of notification
-            smallIcon:      String, //Small icon showed in notification area, only res URI
-            icon:           String, //icon showed in notification drawer
-            openAppOnClick: Boolean,//is main app activity should be opened after clicking on notification
-            vibration:      [Integer], //Optional vibration pattern - see description
-            data:           Object  //Custom object associated with notification
-        }
-    }
-    */
+app.factory('Geofences', function($http, remoteServer, $localstorage, $log) {
     return {
-        all: function() {
+        all: function(latitude, longitude, radius) {
             //return points;
-            return remoteServer.getData('points.json')        
+            return remoteServer.getData('points/'+latitude+'/'+longitude+'/'+radius)
             .success(function(response) {
                 var data = response;
                 var points = [];
@@ -262,12 +169,12 @@ app.factory('Geofences', function($http, remoteServer, $localstorage, $ionicUser
                             data : {
                               g: data[i].id,
                               n: data[i].notification_id,
-                              u: $ionicUser.id
+                              //u: $ionicUser.id
                             }
                         }
                     }
                     points.push(point);
-                    //$log.log(i, point);
+                    $log.log(i, point);
                 }
                 // localStorage 
                 $localstorage.clear('points');
@@ -278,6 +185,7 @@ app.factory('Geofences', function($http, remoteServer, $localstorage, $ionicUser
             })
             .error(function(err){
                 $log.error('No se pudo recuperar la data', err);
+                //Rollbar.critical("services > Geofences > all");
             });
         }
     }

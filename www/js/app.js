@@ -7,14 +7,16 @@ var app = angular.module('starter', [
   'firebase',
   'greatCircles',
   'ngTagsInput',
+  //'tandibar/ng-//Rollbar',
 ]);
 
 app.constant("Config", {
   "googleMapsUrl" : "AIzaSyAUpXlOIJWDkb5y9SOv_yjHpvuCrF3OqFY",
-  "Server": "https://pooock.com/admin/index.php/api/data", // https://pooock.stamplayapp.com/api/cobject/v1
+  "Server": "https://pooock.com/admin/index.php/api/data",
+  "API": "https://pooock.com/api",
 })
 
-app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup, $window, $log, $ionicLoading, $ionicPopup, geoService, $state, $ionicAuth, $localstorage, Geofences, isUserLogged, updateApp) {
+app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup, $window, $log, $ionicLoading, $ionicPopup, geoService, $state, $localstorage, Geofences, isUserLogged) {
 
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -28,17 +30,15 @@ app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup
   });
 
   // si esta autenticado, ir a tareas
-  if ($ionicAuth.isAuthenticated()) {
-    isUserLogged.check();
-    $state.go('tab.dash');
-  }
+  //if ($ionicAuth.isAuthenticated()) {
+    //isUserLogged.check();
+    //$state.go('tab.dash');
+  //}
 
   $ionicPlatform.ready(function() {
     // Get user location
     geoService.getPosition();
-    //updateApp.checkForUpdates();
-    //$localstorage.set('compile_version',moment().unix());
-    //$log.debug('compile_version', $localstorage.get('compile_version') );
+    $log.debug('getPosition', geoService.getPosition() );
   });
 
   $ionicPlatform.ready(function(){
@@ -47,11 +47,10 @@ app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup
     // run when is already done!
     if(points && points.length>0 && points!==undefined){
       $log.debug('Geofences: Pooock around ', points.length);
-
-      $window.geofence.addOrUpdate(points);
-      $window.geofence.onTransitionReceived = function (geofences) {
+      try {
+        $window.geofence.addOrUpdate(points);
+        $window.geofence.onTransitionReceived = function (geofences) {
           //$log.debug('onTransitionReceived', geofences);
-          //$localstorage.set('onTransitionReceived_'+moment().unix(), angular.toJson(geofences) );
 
           // Add metrics to Firebase
           var res = geofences[0].notification.data;
@@ -64,12 +63,6 @@ app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup
                   title: "Geofence transition",
                   text: "Without notification"
                 };
-                // $ionicLoading.show({
-                //   //title: geo.notification.title,
-                //   template: geo.notification.text,
-                //   noBackdrop: true,
-                //   duration: 5000
-                // });
                 //$log.debug('geofences (geo)', geofences);
                 var alertPopup = $ionicPopup.show({
                     title: geo.notification.title,
@@ -84,18 +77,22 @@ app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup
               });
             });
           }
+        }
+      }
+      catch(err) {
+        $log.error('Try/catch', err);
       }
       
       $window.geofence.initialize(function () {
         $log.log("Geofences: OK");
       })
     } else {
-      $log.info('Geofences: Users must be logged to get some Pooock');
+      $state.go('tab.dash');
+      //$log.info('Geofences: Users must be logged to get some Pooock');
     }
     //
     $window.geofence.onNotificationClicked = function (notificationData) {
       //$log.debug('Geofences: onNotificationClicked', notificationData);
-      //$localstorage.set('onNotificationClicked_'+moment().unix(), angular.toJson(notificationData) );
 
       // Add metrics to Firebase
       remoteServer.pushFirebase(notificationData.g, notificationData.n, notificationData.u, 'notifications');
@@ -108,11 +105,19 @@ app.run(function($ionicPlatform, $rootScope, $timeout, remoteServer, $ionicPopup
         remoteServer.pushFirebase(notificationData.g, notificationData.n, notificationData.u, 'clicked');
         
         // Deberia abrir el popup
-        $state.go('app.timeline');
+        $state.go('tab.timeline');
       }
     }
     //
-  })  
+  });  
+
+  $ionicPlatform.ready(function() {
+      //TestFairy services
+      TestFairy.begin("f83570976e406303162da183ffae62f5b6a89684");
+      // //Rollbar
+      //window.cordova.plugins.//Rollbar.init();
+  });
+
 
 });
 
@@ -122,30 +127,15 @@ app.config(function($compileProvider){
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|blob):|data:image\//);
 });
 
-app.config(function($ionicCloudProvider) {
-  $ionicCloudProvider.init({
-    "core": {
-      "app_id": "c48ef6d6"
-    },
-    "auth": {
-        "facebook": {
-            "scope": []
-        }
-    },
-    "push": {
-        "sender_id": "260441399546",
-        "pluginConfig": {
-            "ios": {
-                "badge": true,
-                "sound": true
-            },
-            "android": {
-                "iconColor": "#343434"
-            }
-        }
-    }
-  });
-})
+// app.config(function(RollbarProvider) {
+//     RollbarProvider.init({
+//       accessToken: '1129bb602016431291f96e2d09c52da3',
+//         captureUncaught: true,
+//       payload: {
+//         environment: 'production'
+//       }
+//   });
+// });//</rollbar_environment> </your-application-token>
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -186,33 +176,34 @@ app.config(function($stateProvider, $urlRouterProvider) {
     }
   })
 
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  })
+  // .state('tab.account', {
+  //   url: '/account',
+  //   views: {
+  //     'tab-account': {
+  //       templateUrl: 'templates/account.html',
+  //       controller: 'AccountCtrl'
+  //     }
+  //   }
+  // })
 
-  .state('logout', {
-      url: '/logout',
-      controller: 'AppCtrl'
-  })
+  // .state('logout', {
+  //     url: '/logout',
+  //     controller: 'AppCtrl'
+  // })
 
-  .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
-  })
+  // .state('login', {
+  //     url: '/login',
+  //     templateUrl: 'templates/dashboard.html', //'templates/login.html',
+  //     controller: 'DashCtrl' //'LoginCtrl'
+  // })
 
-  .state('slider', {
-      url: '/slider',
-      templateUrl: 'templates/principal.html',
-      controller: 'SetupCtrl'
-  });
+  // .state('slider', {
+  //     url: '/slider',
+  //     templateUrl: 'templates/principal.html',
+  //     controller: 'SetupCtrl'
+  // })
+  ;
 
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/tab/dash');
 
 });

@@ -1,4 +1,4 @@
-app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, geoService, $ionicPopup, $timeout, $ionicUser) {
+app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, Config, $log, remoteServer, geoService, $ionicPopup, $timeout) {
 
   $scope.getAll = function(){
     $ionicLoading.show();
@@ -11,6 +11,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
     })
     .error(function(err){
       $log.error(err);
+      //Rollbar.critical("timeline > remoteServer > getAll");
       $ionicLoading.hide();
     });
   };
@@ -30,6 +31,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
     }, function(err) {
       $ionicLoading.hide();
       $log.error('MapaCtrl getCurrentPosition error: ', err.message);
+      //Rollbar.warning("timeline > ubicar > Cant connect with Google Maps API");
     });
   };
 
@@ -63,6 +65,7 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
             })
             .error(function(err){
               $log.error('TL > showCoupon > post', err);
+              //Rollbar.critical("timeline > showCoupon");
             });
           }
         }
@@ -87,13 +90,14 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: '<i class="ion-thumbsdown"></i>',
           type: 'button-assertive',
           onTap: function() {
-            var valores = { n: i, d: 1, u: 0, t: $ionicUser.id };
+            var valores = { n: i, d: 1, u: 0, t: moment().unix() };
             remoteServer.postData('votes', valores)
             .success(function(data) {
               $log.log('TL > showVotes > post', data);
             })
             .error(function(err){
               $log.error('TL > showVotes > post', err);
+              //Rollbar.critical("timeline > showVotes > down");
             });
           }
         },
@@ -101,13 +105,14 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: '<i class="ion-thumbsup"></i>',
           type: 'button-balanced',
           onTap: function() {
-            var valores = { n: i, d: 0, u: 1, t: $ionicUser.id };
+            var valores = { n: i, d: 0, u: 1, t: moment().unix() };
             remoteServer.postData('votes', valores)
             .success(function(data) {
               $log.log('TL > showVotes > post', data);
             })
             .error(function(err){
               $log.error('TL > showVotes > post', err);
+              //Rollbar.critical("timeline > showVotes > up");
             });
           }
         }
@@ -137,13 +142,14 @@ app.controller('TimelineCtrl', function($scope, Exchange, $http, $ionicLoading, 
           text: 'Enviar',
           // type: 'button-positive',
           onTap: function(e) {
-            var valores = { n: i, c: $scope.data.comments, u: $ionicUser.id };
+            var valores = { n: i, c: $scope.data.comments, u: moment().unix() };
             remoteServer.postData('comments', valores)
             .success(function(data) {
               $log.log('TL > showComments > post', data);
             })
             .error(function(err){
               $log.error('TL > showComments > post', err);
+              //Rollbar.critical("timeline > showComments");
             });
           }
         }

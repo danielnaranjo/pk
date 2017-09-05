@@ -1,4 +1,4 @@
-app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange, $ionicUser, $ionicPopup, $state, $ionicSlideBoxDelegate, $ionicLoading, $log, $localstorage) {
+app.controller('SetupCtrl', function($scope, $rootScope, $stateParams, Exchange, $ionicPopup, $state, $ionicSlideBoxDelegate, $ionicLoading, $log, $localstorage) {
 
     $scope.slides = [
         {name:"Registrate", text:"Usa tu facebook o Twitter, jamas publicaremos en tu nombre!",  image:"img/PantallasSlider-02.png", button: true },

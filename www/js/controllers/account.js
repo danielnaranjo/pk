@@ -1,4 +1,4 @@
-app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicUser, $ionicPlatform, remoteServer, $localstorage) {
+app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout, Exchange, Config, $log, $ionicPlatform, remoteServer, $localstorage) {
 
     if($ionicUser){
         // $scope.usuario=$ionicUser.social.twitter.data.full_name||$ionicUser.social.facebook.data.full_name;
@@ -9,7 +9,7 @@ app.controller('AccountCtrl', function($scope, $rootScope, $ionicPopup, $timeout
         $scope.fotoPerfil=$localstorage.get('pooock_picture');
         $scope.uid=$localstorage.get('pooock_uid');
         $scope.full_data=$localstorage.getObject('pooock_data');
-        $scope.u = $ionicUser.id;
+        //$scope.u = $ionicUser.id;
     }
 
     remoteServer.getData('category')
